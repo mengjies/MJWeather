@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <dbname value="mj_weather" />
+
+    <version value="4" />
+
+    <list>
+        <mapping class="com.mj.weather.entity.CityItem" />
+        <mapping class="com.mj.weather.entity.User" />
+        <mapping class="com.mj.weather.entity.JsonCache" />
+    </list>
+</litepal>

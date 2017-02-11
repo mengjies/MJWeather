@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 24
+    buildToolsVersion "24.0.2"
+    defaultConfig {
+        applicationId "com.mj.weather"
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    productFlavors {
+        tencent {}
+        baidu {}
+        qiho {}
+        xiaomi {}
+        zs91{}
+        hiapk{}
+        wandoujia{}
+        anzhi{}
+        productFlavors.all { flavor ->
+            flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.android.support:design:24.2.1'
+    compile 'com.android.support:cardview-v7:24.2.1'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:1.3.0'
+// If you want to use the GPU Filters
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'pub.devrel:easypermissions:0.2.1'
+    compile 'org.litepal.android:core:1.4.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.umeng.analytics:analytics:latest.integration'
+    testCompile 'junit:junit:4.12'
+}

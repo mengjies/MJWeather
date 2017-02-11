@@ -1,0 +1,106 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/spacing_double"
+    android:paddingTop="@dimen/spacing_double"
+    tools:showIn="@layout/activity_login">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingEnd="@dimen/spacing_double"
+        android:paddingStart="@dimen/spacing_double"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_username_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textCapWords"
+            android:textSize="@dimen/txtSize_edit" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingEnd="@dimen/spacing_double"
+        android:paddingStart="@dimen/spacing_double"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_password_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:textSize="@dimen/txtSize_edit" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingEnd="@dimen/spacing_double"
+        android:paddingStart="@dimen/spacing_double"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/et_password_again"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_password_again_hint"
+            android:imeOptions="actionNext"
+            android:inputType="textPassword"
+            android:textSize="@dimen/txtSize_edit" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:minHeight="?android:attr/actionBarSize"
+        android:paddingEnd="@dimen/spacing_double"
+        android:paddingStart="@dimen/spacing_double"
+        android:transitionGroup="true"
+        tools:ignore="UnusedAttribute,NewApi">
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/txt_email_hint"
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress"
+            android:textSize="@dimen/txtSize_edit" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/bt_submit"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_margin="@dimen/spacing_double"
+        android:background="@drawable/bg_submit_selector"
+        android:text="注  册"
+        android:textColor="@color/txtColor_white"
+        android:textSize="@dimen/txtSize_submit" />
+
+</LinearLayout>

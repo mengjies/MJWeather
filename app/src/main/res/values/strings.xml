@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">MJ天气</string>
+
+    <string name="menu_setting">设置</string>
+    <string name="menu_backup">Backup</string>
+    <string name="menu_delete">Delete</string>
+    <string name="nav_call">Call</string>
+    <string name="nav_friends">friends</string>
+    <string name="nav_location">location</string>
+    <string name="nav_mail">mail</string>
+    <string name="nav_task">task</string>
+    <string name="mail">mengjies06@163.com</string>
+    <string name="username">mengjie li</string>
+    <!--Permission-->
+    <string name="permission_init_alert">需要访问位置、读写存储卡、读取手机识别码等权限</string>
+    <string name="permission_init_not_granted">相关权限被禁止，应用将不能正常使用，需要到系统应用管理界面更改设置，是否去设置？</string>
+    <string name="title_settings_dialog">设置权限</string>
+    <string name="bt_setting">设置</string>
+    <string name="bt_ok">确认</string>
+    <string name="bt_cancel">取消</string>
+    <string name="permission_location_alert">需要定位相关权限</string>
+    <string name="permission_location_not_granted">定位相关权限被禁止，定位功能将无法使用，需要到系统应用管理界面更改设置，是否去设置？</string>
+    <string name="menu_sign_in">注册</string>
+    <string name="menu_login">登录</string>
+    <string name="txt_username_hint">用户名</string>
+    <string name="txt_password_hint">输入密码</string>
+    <string name="txt_password_again_hint">再次输入密码</string>
+    <string name="txt_email_hint">输入邮箱</string>
+</resources>
