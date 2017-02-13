@@ -1,4 +1,6 @@
 # MJWeather
+[去应用市场下载](http://sj.qq.com/myapp/detail.htm?apkName=com.mj.weather)
+
    使用和风天气接口获取天气数据
    
    使用百度地图实现定位功能
