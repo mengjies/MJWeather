@@ -3,7 +3,7 @@ package com.mj.weather.utils;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.mj.weather.AppConfig;
+import com.mj.weather.base.AppConfig;
 
 
 /**

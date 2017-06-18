@@ -2,7 +2,7 @@ package com.mj.weather.utils;
 
 import android.util.Log;
 
-import com.mj.weather.AppConfig;
+import com.mj.weather.base.AppConfig;
 
 
 /**
