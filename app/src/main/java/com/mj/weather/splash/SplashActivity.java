@@ -11,7 +11,7 @@ import android.support.v7.app.AlertDialog;
 import com.mj.weather.R;
 import com.mj.weather.weather.MainActivity;
 import com.mj.weather.base.BaseActivity;
-import com.mj.weather.entity.CityItem;
+import com.mj.weather.account.model.dp.CityItem;
 import com.mj.weather.utils.JsonUtils;
 import com.mj.weather.utils.LogUtils;
 

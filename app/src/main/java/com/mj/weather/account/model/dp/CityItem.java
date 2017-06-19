@@ -1,4 +1,4 @@
-package com.mj.weather.entity;
+package com.mj.weather.account.model.dp;
 
 import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;

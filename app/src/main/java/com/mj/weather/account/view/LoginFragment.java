@@ -1,4 +1,4 @@
-package com.mj.weather.login;
+package com.mj.weather.account.view;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,24 +12,19 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mj.weather.R;
+import com.mj.weather.account.contract.LoginContract;
+import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.base.BaseFragment;
-import com.mj.weather.entity.User;
-import com.mj.weather.http.UserProtocol;
-import com.mj.weather.utils.JsonUtils;
 import com.mj.weather.utils.LogUtils;
 import com.mj.weather.utils.ToastUtils;
 import com.mj.weather.utils.TxtCheckout;
 import com.mj.weather.weather.MainActivity;
-import com.mj.weather.weather.SignInActivity;
+import com.mj.weather.account.activity.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
-import org.litepal.crud.DataSupport;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
+import io.reactivex.Observer;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
 
 import static com.mj.weather.utils.Proconditions.checkNotNull;
 
@@ -44,6 +39,8 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     private EditText etPassword;
     private Button btSubmit;
     private LoginContract.Presenter mPresenter;
+    private String username;
+    private String password;
 
     public static LoginFragment newInstance() {
         LoginFragment fragment = new LoginFragment();
@@ -103,43 +100,46 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 提交
+     */
     private void submit() {
-        final String username = etUsername.getText().toString().trim();
+        username = etUsername.getText().toString().trim();
         if (!TxtCheckout.isUsername(username)) {
             ToastUtils.showToast(getContext(), "用户名不合法！");
             return;
         }
-        final String password = etPassword.getText().toString().trim();
+        password = etPassword.getText().toString().trim();
         if (!TxtCheckout.isPassword(password)) {
             ToastUtils.showToast(getContext(), "密码不合法！");
             return;
         }
 
-        UserProtocol.login(username, password, new Callback() {
+        mPresenter.login(username, password);
+
+    }
+
+
+    /**
+     * 登录观察者
+     * @return
+     */
+    @Override
+    public Observer<UserBean.RspLogin> loginObserver() {
+        return new Observer<UserBean.RspLogin>() {
             @Override
-            public void onFailure(Call call, IOException e) {
-                LogUtils.e(TAG, e.getMessage());
-                ToastUtils.showToast(getContext(), e.getMessage());
+            public void onSubscribe(@NonNull Disposable d) {
+
             }
 
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String json = response.body().string();
-                UserProtocol.RspLogin rspLogin = JsonUtils.toObject(json, UserProtocol.RspLogin.class);
+            public void onNext(@NonNull UserBean.RspLogin rspLogin) {
                 if (rspLogin != null) {
                     if (rspLogin.retCode.equals("200")) {
                         //友盟账号统计
                         MobclickAgent.onProfileSignIn(username);
                         //保存数据
-                        User user = DataSupport.findFirst(User.class);
-                        if (user == null) {
-                            user = new User();
-                        }
-                        user.setUsername(username);
-                        user.setPassword(password);
-                        user.setToken(rspLogin.result.token);
-                        user.setUid(rspLogin.result.uid);
-                        user.save();
+                        mPresenter.saveLoginData(username, password, rspLogin);
                         //跳转到MainActivity
                         MainActivity.actionStart(getActivity());
                         getActivity().finish();
@@ -149,7 +149,17 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
                     }
                 }
             }
-        });
 
+            @Override
+            public void onError(@NonNull Throwable e) {
+                LogUtils.e(TAG, e.getMessage());
+                ToastUtils.showToast(getContext(), e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
     }
 }

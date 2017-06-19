@@ -1,4 +1,6 @@
-package com.mj.weather.http;
+package com.mj.weather.account;
+
+import com.mj.weather.http.HttpUtils;
 
 import okhttp3.Callback;
 

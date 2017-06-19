@@ -59,8 +59,8 @@
             android:name=".weather.MainActivity"
             android:launchMode="singleTask" />
         <activity android:name=".citylist.CityListActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".weather.SignInActivity" />
+        <activity android:name=".account.activity.LoginActivity" />
+        <activity android:name=".account.activity.SignInActivity" />
 
         <service
             android:name="com.baidu.location.f"

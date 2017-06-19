@@ -1,4 +1,4 @@
-package com.mj.weather.weather;
+package com.mj.weather.account.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,9 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mj.weather.R;
+import com.mj.weather.account.UserProtocol;
 import com.mj.weather.base.BaseActivity;
-import com.mj.weather.http.UserProtocol;
-import com.mj.weather.login.LoginActivity;
 import com.mj.weather.utils.JsonUtils;
 import com.mj.weather.utils.LogUtils;
 import com.mj.weather.utils.ToastUtils;

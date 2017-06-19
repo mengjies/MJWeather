@@ -3,6 +3,8 @@ package com.mj.weather.base;
 import android.app.Application;
 import android.content.Context;
 
+import com.mj.weather.account.model.http.UserApiClient;
+import com.mj.weather.mvp.model.http.ApiClient;
 import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePal;
@@ -24,6 +26,9 @@ public class MyApplication extends Application {
         LitePal.initialize(context);
         //友盟场景类型设置接口
         MobclickAgent.setScenarioType(context, MobclickAgent.EScenarioType.E_UM_NORMAL);
+        //初始化自定义APIClient
+        ApiClient.init();
+        UserApiClient.init();
     }
 
     public static Context getContext() {

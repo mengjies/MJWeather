@@ -1,4 +1,4 @@
-package com.mj.weather.entity;
+package com.mj.weather.account.model.dp;
 
 import org.litepal.crud.DataSupport;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * Created by MengJie on 2017/1/21.
  */
 
-public class CityUtils {
+public class CityDao {
 
 
     public static List<CityItem> getCityListByParent(int parentId) {

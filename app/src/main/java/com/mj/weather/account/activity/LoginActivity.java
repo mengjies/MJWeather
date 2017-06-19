@@ -1,36 +1,16 @@
-package com.mj.weather.login;
+package com.mj.weather.account.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.mj.weather.R;
+import com.mj.weather.account.view.LoginFragment;
+import com.mj.weather.account.presenter.LoginPresenter;
 import com.mj.weather.base.BaseActivity;
 import com.mj.weather.utils.ActivityUtils;
-import com.mj.weather.weather.MainActivity;
-import com.mj.weather.weather.SignInActivity;
-import com.mj.weather.entity.User;
-import com.mj.weather.http.UserProtocol;
-import com.mj.weather.utils.JsonUtils;
-import com.mj.weather.utils.LogUtils;
-import com.mj.weather.utils.ToastUtils;
-import com.mj.weather.utils.TxtCheckout;
-import com.umeng.analytics.MobclickAgent;
-
-import org.litepal.crud.DataSupport;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class LoginActivity extends BaseActivity{
     private static final String TAG = "LoginActivity";

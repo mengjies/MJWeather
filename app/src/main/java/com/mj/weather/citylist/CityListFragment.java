@@ -20,8 +20,8 @@ import android.widget.ListView;
 import com.baidu.location.BDLocation;
 import com.mj.weather.R;
 import com.mj.weather.base.BaseFragment;
-import com.mj.weather.entity.CityItem;
-import com.mj.weather.entity.CityUtils;
+import com.mj.weather.account.model.dp.CityItem;
+import com.mj.weather.account.model.dp.CityDao;
 import com.mj.weather.common.MyLocationListener;
 import com.mj.weather.utils.ToastUtils;
 
@@ -63,7 +63,7 @@ public class CityListFragment extends BaseFragment {
         Bundle bundle = getArguments();
         parentId = bundle.getInt("parentId");
         String cityName = bundle.getString("cityName");
-        dataList = CityUtils.getCityListByParent(parentId);
+        dataList = CityDao.getCityListByParent(parentId);
 
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
@@ -76,7 +76,7 @@ public class CityListFragment extends BaseFragment {
 
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,
-                CityUtils.getNameArrayList(dataList));
+                CityDao.getNameArrayList(dataList));
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
