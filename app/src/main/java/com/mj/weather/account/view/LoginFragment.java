@@ -1,6 +1,7 @@
 package com.mj.weather.account.view;
 
 import android.os.Bundle;
+import android.os.Process;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,21 +13,21 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mj.weather.R;
+import com.mj.weather.account.activity.SignInActivity;
 import com.mj.weather.account.contract.LoginContract;
 import com.mj.weather.account.model.http.entity.UserBean;
-import com.mj.weather.base.BaseFragment;
-import com.mj.weather.utils.LogUtils;
-import com.mj.weather.utils.ToastUtils;
-import com.mj.weather.utils.TxtCheckout;
+import com.mj.weather.common.base.BaseFragment;
+import com.mj.weather.common.util.LogUtils;
+import com.mj.weather.common.util.ToastUtils;
+import com.mj.weather.common.util.TxtCheckout;
 import com.mj.weather.weather.MainActivity;
-import com.mj.weather.account.activity.SignInActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
-import static com.mj.weather.utils.Proconditions.checkNotNull;
+import static com.mj.weather.common.common.Proconditions.checkNotNull;
 
 /**
  * Created by MengJie on 2017/2/18.
@@ -43,8 +44,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     private String password;
 
     public static LoginFragment newInstance() {
-        LoginFragment fragment = new LoginFragment();
-        return fragment;
+        return new LoginFragment();
     }
 
     @Override
@@ -122,6 +122,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
 
     /**
      * 登录观察者
+     *
      * @return
      */
     @Override
@@ -129,11 +130,16 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         return new Observer<UserBean.RspLogin>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-
+                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
+                LogUtils.d(TAG, "onSubscribe");
+                if (!d.isDisposed()) {
+                    d.dispose();
+                }
             }
 
             @Override
             public void onNext(@NonNull UserBean.RspLogin rspLogin) {
+                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
                 if (rspLogin != null) {
                     if (rspLogin.retCode.equals("200")) {
                         //友盟账号统计
@@ -152,13 +158,15 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
 
             @Override
             public void onError(@NonNull Throwable e) {
+                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
                 LogUtils.e(TAG, e.getMessage());
                 ToastUtils.showToast(getContext(), e.getMessage());
             }
 
             @Override
             public void onComplete() {
-
+                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
+                LogUtils.d(TAG, "onComplete");
             }
         };
     }

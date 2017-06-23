@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.mj.weather.R;
-import com.mj.weather.http.HeProtocol;
+import com.mj.weather.weather.http.HeProtocol;
 
 import java.util.List;
 

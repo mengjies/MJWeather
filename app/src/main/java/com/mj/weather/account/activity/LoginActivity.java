@@ -7,13 +7,21 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
 import com.mj.weather.R;
-import com.mj.weather.account.view.LoginFragment;
+import com.mj.weather.account.component.DaggerLoginComponent;
+import com.mj.weather.account.module.LoginViewModule;
 import com.mj.weather.account.presenter.LoginPresenter;
-import com.mj.weather.base.BaseActivity;
-import com.mj.weather.utils.ActivityUtils;
+import com.mj.weather.account.view.LoginFragment;
+import com.mj.weather.common.base.BaseActivity;
+import com.mj.weather.MyApplication;
+import com.mj.weather.common.util.ActivityUtils;
 
-public class LoginActivity extends BaseActivity{
+import javax.inject.Inject;
+
+public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
+
+    @Inject
+    LoginPresenter loginPresenter;
 
 
     public static void actionStart(Activity act) {
@@ -26,6 +34,7 @@ public class LoginActivity extends BaseActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_activity);
 
+        //Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -36,14 +45,18 @@ public class LoginActivity extends BaseActivity{
         }
 
         //加载view
-        LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);
+        LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentById(R.id.loginFrame);
         if (loginFragment == null) {
             loginFragment = LoginFragment.newInstance();
-            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), loginFragment, R.id.contentFrame);
+            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(), loginFragment, R.id.loginFrame);
         }
 
-        //创建presenter
-        new LoginPresenter(loginFragment);
+        //dagger build
+        DaggerLoginComponent.builder()
+                .loginViewModule(new LoginViewModule(loginFragment))
+                .userRepositoryComponent(((MyApplication)getApplication()).getUserRepositoryComponent())
+                .build()
+                .inject(this);
 
     }
 

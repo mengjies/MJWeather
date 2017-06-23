@@ -1,18 +1,21 @@
 package com.mj.weather.account.presenter;
 
+import android.os.Process;
 import android.support.annotation.NonNull;
 
 import com.mj.weather.account.contract.LoginContract;
+import com.mj.weather.account.model.dp.User;
 import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.account.model.repository.UserRepository;
-import com.mj.weather.account.model.dp.User;
 
 import org.litepal.crud.DataSupport;
+
+import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.mj.weather.utils.Proconditions.checkNotNull;
+import static com.mj.weather.common.common.Proconditions.checkNotNull;
 
 /**
  * Created by MengJie on 2017/2/18.
@@ -21,9 +24,24 @@ import static com.mj.weather.utils.Proconditions.checkNotNull;
 public class LoginPresenter implements LoginContract.Presenter {
 
     private final LoginContract.View mLoginView;
+    private UserRepository mUserRepository;
 
-    public LoginPresenter(@NonNull LoginContract.View loginView) {
+    /**
+     * Dagger strictly enforces that arguments not marked with {@code @Nullable} are not injected
+     * with {@code @Nullable} values.
+     */
+    @Inject
+    LoginPresenter(@NonNull LoginContract.View loginView,UserRepository userRepository) {
         mLoginView = checkNotNull(loginView);
+        mUserRepository = userRepository;
+    }
+
+    /**
+     * Method injection is used here to safely reference {@code this} after the object is created.
+     * For more information, see Java Concurrency in Practice.
+     */
+    @Inject
+    void setupListeners() {
         mLoginView.setPresenter(this);
     }
 
@@ -34,34 +52,28 @@ public class LoginPresenter implements LoginContract.Presenter {
 
     /**
      * 登录
+     *
      * @param username
      * @param password
      */
     @Override
     public void login(String username, String password) {
-        UserRepository.login(username, password)
+        String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
+        mUserRepository.login(username, password)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(mLoginView.loginObserver());
-
     }
 
     /**
      * 保存登录数据
+     *
      * @param username
      * @param password
      * @param rspLogin
      */
     @Override
     public void saveLoginData(String username, String password, UserBean.RspLogin rspLogin) {
-        User user = DataSupport.findFirst(User.class);
-        if (user == null) {
-            user = new User();
-        }
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setToken(rspLogin.result.token);
-        user.setUid(rspLogin.result.uid);
-        user.save();
+        mUserRepository.saveUserData(username, password, rspLogin);
     }
 }

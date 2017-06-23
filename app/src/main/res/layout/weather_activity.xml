@@ -32,7 +32,7 @@
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <com.mj.weather.common.MyNestedScrollView
+            <com.mj.weather.common.common.MyNestedScrollView
                 android:id="@+id/nested_scroll_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -52,7 +52,7 @@
 
                 </LinearLayout>
 
-            </com.mj.weather.common.MyNestedScrollView>
+            </com.mj.weather.common.common.MyNestedScrollView>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 

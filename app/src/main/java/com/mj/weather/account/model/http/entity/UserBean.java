@@ -1,6 +1,5 @@
 package com.mj.weather.account.model.http.entity;
 
-import com.mj.weather.account.UserProtocol;
 
 /**
  * Created by MengJie on 2017/6/19.
@@ -22,7 +21,7 @@ public class UserBean {
     public static class RspLogin {
         public String retCode;
         public String msg;
-        public UserProtocol.Result result;
+        public Result result;
     }
 
     public static class RspProfilePut {

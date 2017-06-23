@@ -10,6 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@drawable/img_splash"
     android:fitsSystemWindows="true"
-    tools:context="com.mj.weather.splash.SplashActivity">
+    tools:context="com.mj.weather.account.activity.SplashActivity">
 
 </RelativeLayout>

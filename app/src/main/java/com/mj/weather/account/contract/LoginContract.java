@@ -1,8 +1,8 @@
 package com.mj.weather.account.contract;
 
 import com.mj.weather.account.model.http.entity.UserBean;
-import com.mj.weather.base.BasePresenter;
-import com.mj.weather.base.BaseView;
+import com.mj.weather.common.base.BasePresenter;
+import com.mj.weather.common.base.BaseView;
 
 import io.reactivex.Observer;
 

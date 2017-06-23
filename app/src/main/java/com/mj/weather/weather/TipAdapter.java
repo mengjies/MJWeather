@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.mj.weather.R;
-import com.mj.weather.http.HeProtocol;
+import com.mj.weather.weather.http.HeProtocol;
 
 import java.util.List;
 

@@ -11,9 +11,8 @@ import java.util.List;
 
 public class CityDao {
 
-
     public static List<CityItem> getCityListByParent(int parentId) {
-        return DataSupport.where("ParentID = ?", parentId+"").find(CityItem.class);
+        return DataSupport.where("ParentID = ?", parentId + "").find(CityItem.class);
     }
 
     public static List<String> getNameArrayList(List<CityItem> list) {
@@ -22,5 +21,14 @@ public class CityDao {
             arrayList.add(city.getTheName());
         }
         return arrayList;
+    }
+
+    public static boolean hasChildren(int areaID) {
+        int count = DataSupport.where("ParentID = ?", areaID + "").count(CityItem.class);
+        return count != 0;
+    }
+
+    public static CityItem getCityById(int areaID) {
+        return DataSupport.where("AreaId = ?", areaID + "").findFirst(CityItem.class);
     }
 }

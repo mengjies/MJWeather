@@ -5,13 +5,11 @@ import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 
-import static android.R.attr.id;
-
 /**
  * Created by MengJie on 2017/1/20.
  */
 
-public class CityItem extends DataSupport implements Serializable{
+public class CityItem extends DataSupport implements Serializable {
     //"AreaID":"0","TheName":"\u4e2d\u56fd","Pinyin":"zg","Level":"0","ParentID":"0"
     @Column(unique = true)
     private int AreaID;
