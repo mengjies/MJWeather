@@ -7,14 +7,14 @@ import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
+import com.mj.weather.MyApplication;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerSignInComponent;
 import com.mj.weather.account.module.SignInViewModule;
 import com.mj.weather.account.presenter.SignInPresenter;
 import com.mj.weather.account.view.SignInFragment;
 import com.mj.weather.common.base.BaseActivity;
-import com.mj.weather.MyApplication;
-import com.mj.weather.common.util.ActivityUtils;
+import com.mj.weather.common.common.ActivityUtils;
 
 import javax.inject.Inject;
 
@@ -22,7 +22,8 @@ public class SignInActivity extends BaseActivity {
     private static final String TAG = "SignInActivity";
     private static final String CURRENT_STATE_KEY = "state_key";
 
-    @Inject SignInPresenter signInPresenter;
+    @Inject
+    SignInPresenter signInPresenter;
 
     public static void actionStart(Activity act) {
         Intent intent = new Intent(act, SignInActivity.class);
@@ -32,7 +33,7 @@ public class SignInActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.signin_activity);
+        setContentView(R.layout.activity_signin);
 
         //toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -54,7 +55,7 @@ public class SignInActivity extends BaseActivity {
         //dagger
         DaggerSignInComponent.builder()
                 .signInViewModule(new SignInViewModule(signInFragment))
-                .userRepositoryComponent(((MyApplication)getApplication()).getUserRepositoryComponent())
+                .userRepositoryComponent(((MyApplication) getApplication()).getUserRepositoryComponent())
                 .build()
                 .inject(this);
 

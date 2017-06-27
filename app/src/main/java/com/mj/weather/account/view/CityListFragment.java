@@ -19,11 +19,9 @@ import android.widget.ListView;
 import com.baidu.location.BDLocation;
 import com.mj.weather.R;
 import com.mj.weather.account.activity.CityListActivity;
-import com.mj.weather.account.component.DaggerCityRepositoryComponent;
+import com.mj.weather.account.contract.CityListContract;
 import com.mj.weather.account.model.dp.CityItem;
-import com.mj.weather.account.model.repository.CityRepository;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.common.MyLocationListener;
 import com.mj.weather.common.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -33,36 +31,44 @@ import java.util.List;
  * Created by MengJie on 2017/1/20.
  */
 
-public class CityListFragment extends BaseFragment {
+public class CityListFragment extends BaseFragment implements CityListContract.View {
     private static final String TAG = "CityListFragment";
 
     private List<CityItem> dataList = new ArrayList<>();
     private CityListActivity activity;
     private int parentId;
-    private CityRepository cityRepository;
+
+    private CityListContract.Presenter mCityListPresenter;
+
+    public static CityListFragment newInstance(int parentId, String theName) {
+        Bundle args = new Bundle();
+        args.putInt("parentId", parentId);
+        args.putString("cityName", theName);
+        CityListFragment fragment = new CityListFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        //在Fragment中使用菜单
-        setHasOptionsMenu(true);
+    public void setPresenter(CityListContract.Presenter presenter) {
+        mCityListPresenter = presenter;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.citylist_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_citylist, container, false);
         activity = (CityListActivity) getActivity();
 
-        cityRepository = DaggerCityRepositoryComponent.builder()
-                .build()
-                .proviceCityRepository();
+        //在Fragment中使用菜单
+        setHasOptionsMenu(true);
 
+        //getArguments
         Bundle bundle = getArguments();
         parentId = bundle.getInt("parentId");
         String cityName = bundle.getString("cityName");
-        dataList = cityRepository.getCityListByParent(parentId);
 
+        //toolbar
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.toolbar);
         activity.setSupportActionBar(toolbar);
         ActionBar actionBar = activity.getSupportActionBar();
@@ -72,17 +78,19 @@ public class CityListFragment extends BaseFragment {
             actionBar.setDisplayShowHomeEnabled(true);
         }
 
+        //listView
+        dataList = mCityListPresenter.getCityListByParent(parentId);
         ListView listView = (ListView) view.findViewById(R.id.list_view);
         ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,
-                cityRepository.getNameArrayList(dataList));
+                mCityListPresenter.getNameArrayList(dataList));
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 CityItem district = dataList.get(position);
-                if (!cityRepository.hasChildren(district.getAreaID())) {
+                if (!mCityListPresenter.hasChildren(district.getAreaID())) {
                     // 天气接口只能查到市级城市
-                    CityItem city = cityRepository.getCityById(district.getParentID());
+                    CityItem city = mCityListPresenter.getCityById(district.getParentID());
                     setResult(city.getTheName(), district.getTheName());
                 } else {
                     activity.replaceFragment(district.getAreaID(), district.getTheName());
@@ -92,7 +100,7 @@ public class CityListFragment extends BaseFragment {
         return view;
     }
 
-    private void setResult(String cityName, String districtName) {
+    public void setResult(String cityName, String districtName) {
         Intent intent = new Intent();
         intent.putExtra("cityName", cityName);
         intent.putExtra("districtName", districtName);
@@ -117,11 +125,11 @@ public class CityListFragment extends BaseFragment {
                 }
                 break;
             case R.id.menu_location:
-                BDLocation location = MyLocationListener.location;
+                BDLocation location = activity.mLocation;
                 if (location != null) {
                     setResult(location.getCity(), location.getDistrict());
                 } else {
-                    ToastUtils.showToast(getActivity(), "定位失败！");
+                    activity.proDialog.show();
                 }
                 break;
         }

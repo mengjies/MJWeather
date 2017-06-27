@@ -47,10 +47,10 @@ public class TxtCheckout {
     }
 
     /**
-     *校验邮箱
+     * 校验邮箱
      */
     public static boolean isEmail(String email) {
-        if(TextUtils.isEmpty(email)) return false;
+        if (TextUtils.isEmpty(email)) return false;
         else return email.matches(REGEX_EMAIL);
     }
 
@@ -66,15 +66,15 @@ public class TxtCheckout {
      * 校验银行卡号
      */
     public static boolean isBankCardNo(String bankCardNo) {
-        if(TextUtils.isEmpty(bankCardNo)) return false;
+        if (TextUtils.isEmpty(bankCardNo)) return false;
         else return bankCardNo.matches(REGEX_BANK_CARD);
     }
 
     /**
-     *校验邮编
+     * 校验邮编
      */
     public static boolean isPostcode(String postcode) {
-        if(TextUtils.isEmpty(postcode)) return false;
+        if (TextUtils.isEmpty(postcode)) return false;
         else return postcode.matches(REGEX_POSTCODE);
     }
 
@@ -82,7 +82,7 @@ public class TxtCheckout {
      * 校验正浮点型
      */
     public static boolean isPositiveFloat(String number) {
-        if(TextUtils.isEmpty(number)) return false;
+        if (TextUtils.isEmpty(number)) return false;
         else return number.matches(REGEX_POSITIVE_FLOAT);
     }
 

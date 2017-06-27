@@ -1,7 +1,5 @@
 package com.mj.weather.account.presenter;
 
-import android.support.annotation.NonNull;
-
 import com.mj.weather.account.contract.SignInContract;
 import com.mj.weather.account.model.repository.UserRepository;
 

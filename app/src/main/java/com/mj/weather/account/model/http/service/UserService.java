@@ -36,7 +36,6 @@ public interface UserService {
     Observable<UserBean.RspLogin> login(@Query("key") String key, @Query("username") String username, @Query("password") String password);
 
     /**
-     *
      * @param key
      * @param token
      * @param uid
@@ -45,10 +44,9 @@ public interface UserService {
      * @return
      */
     @GET(UserProtocol.port_profile_put)
-    Observable<UserBean.RspProfilePut> profilePut(@Query("key") String key, @Query("token")String token, @Query("uid") String uid, @Query("item") String item, @Query("value") String value);
+    Observable<UserBean.RspProfilePut> profilePut(@Query("key") String key, @Query("token") String token, @Query("uid") String uid, @Query("item") String item, @Query("value") String value);
 
     /**
-     *
      * @param key
      * @param token
      * @param uid
@@ -56,10 +54,9 @@ public interface UserService {
      * @return
      */
     @GET(UserProtocol.port_profile_query)
-    Observable<UserBean.RspProfileQuery> profileQuery(@Query("key") String key, @Query("token")String token, @Query("uid") String uid, @Query("item") String item);
+    Observable<UserBean.RspProfileQuery> profileQuery(@Query("key") String key, @Query("token") String token, @Query("uid") String uid, @Query("item") String item);
 
     /**
-     *
      * @param key
      * @param token
      * @param uid
@@ -67,10 +64,9 @@ public interface UserService {
      * @return
      */
     @GET(UserProtocol.port_profile_del)
-    Observable<UserBean.RspProfileDel> profileDel(@Query("key") String key, @Query("token")String token, @Query("uid") String uid, @Query("item") String item);
+    Observable<UserBean.RspProfileDel> profileDel(@Query("key") String key, @Query("token") String token, @Query("uid") String uid, @Query("item") String item);
 
     /**
-     *
      * @param key
      * @param token
      * @param uid
@@ -79,10 +75,9 @@ public interface UserService {
      * @return
      */
     @GET(UserProtocol.port_data_put)
-    Observable<UserBean.RspDataPut> dataPut(@Query("key") String key, @Query("token")String token, @Query("uid") String uid, @Query("item") String item, @Query("value") String value);
+    Observable<UserBean.RspDataPut> dataPut(@Query("key") String key, @Query("token") String token, @Query("uid") String uid, @Query("item") String item, @Query("value") String value);
 
     /**
-     *
      * @param key
      * @param token
      * @param uid
@@ -90,10 +85,9 @@ public interface UserService {
      * @return
      */
     @GET(UserProtocol.port_data_query)
-    Observable<UserBean.RspDataQuery> dataQuery(@Query("key") String key, @Query("token")String token, @Query("uid") String uid, @Query("item") String item);
+    Observable<UserBean.RspDataQuery> dataQuery(@Query("key") String key, @Query("token") String token, @Query("uid") String uid, @Query("item") String item);
 
     /**
-     *
      * @param key
      * @param token
      * @param uid
@@ -101,10 +95,9 @@ public interface UserService {
      * @return
      */
     @GET(UserProtocol.port_data_del)
-    Observable<UserBean.RspDataDel> dataDel(@Query("key") String key, @Query("token")String token, @Query("uid") String uid, @Query("item") String item);
+    Observable<UserBean.RspDataDel> dataDel(@Query("key") String key, @Query("token") String token, @Query("uid") String uid, @Query("item") String item);
 
     /**
-     *
      * @param key
      * @param username
      * @param oldPassword

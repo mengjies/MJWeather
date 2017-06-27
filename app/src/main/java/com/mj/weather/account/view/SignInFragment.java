@@ -59,7 +59,7 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.signin_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_signin, container, false);
 
         // If true, the fragment has menu items to contribute.
         setHasOptionsMenu(true);

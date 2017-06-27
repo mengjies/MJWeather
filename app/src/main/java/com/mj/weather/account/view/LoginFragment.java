@@ -20,14 +20,13 @@ import com.mj.weather.common.base.BaseFragment;
 import com.mj.weather.common.util.LogUtils;
 import com.mj.weather.common.util.ToastUtils;
 import com.mj.weather.common.util.TxtCheckout;
-import com.mj.weather.weather.MainActivity;
+import com.mj.weather.account.activity.MainActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
 
-import static com.mj.weather.common.common.Proconditions.checkNotNull;
 
 /**
  * Created by MengJie on 2017/2/18.
@@ -55,13 +54,13 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
 
     @Override
     public void setPresenter(LoginContract.Presenter presenter) {
-        mPresenter = checkNotNull(presenter);
+        mPresenter = presenter;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.login_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
 
         // If true, the fragment has menu items to contribute.
         setHasOptionsMenu(true);

@@ -4,18 +4,14 @@ import android.os.Process;
 import android.support.annotation.NonNull;
 
 import com.mj.weather.account.contract.LoginContract;
-import com.mj.weather.account.model.dp.User;
 import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.account.model.repository.UserRepository;
-
-import org.litepal.crud.DataSupport;
 
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-import static com.mj.weather.common.common.Proconditions.checkNotNull;
 
 /**
  * Created by MengJie on 2017/2/18.
@@ -31,8 +27,8 @@ public class LoginPresenter implements LoginContract.Presenter {
      * with {@code @Nullable} values.
      */
     @Inject
-    LoginPresenter(@NonNull LoginContract.View loginView,UserRepository userRepository) {
-        mLoginView = checkNotNull(loginView);
+    LoginPresenter(@NonNull LoginContract.View loginView, UserRepository userRepository) {
+        mLoginView = loginView;
         mUserRepository = userRepository;
     }
 

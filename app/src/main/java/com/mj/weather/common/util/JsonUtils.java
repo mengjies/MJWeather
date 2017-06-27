@@ -35,7 +35,7 @@ public class JsonUtils {
     /**
      * Json转换为Object对象
      */
-    public static  <T> T toObject(String json, Class<T> clazz) {
+    public static <T> T toObject(String json, Class<T> clazz) {
         T obj = gson.fromJson(json, clazz);
         return obj;
     }

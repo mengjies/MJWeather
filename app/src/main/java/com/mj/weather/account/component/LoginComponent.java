@@ -4,8 +4,6 @@ import com.mj.weather.account.activity.LoginActivity;
 import com.mj.weather.account.module.LoginViewModule;
 import com.mj.weather.common.annotation.PerActivity;
 
-import javax.inject.Singleton;
-
 import dagger.Component;
 
 /**

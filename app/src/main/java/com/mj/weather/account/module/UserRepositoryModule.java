@@ -13,7 +13,8 @@ import dagger.Provides;
 @Module
 public class UserRepositoryModule {
 
-    @Provides @Singleton
+    @Provides
+    @Singleton
     UserRepository provideUserRepository() {
         return new UserRepository();
     }

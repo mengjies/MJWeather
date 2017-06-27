@@ -24,7 +24,8 @@ public class MD5 {
         }
         return hex.toString();
     }
-    public static String ENCODE(String rawStr){
+
+    public static String ENCODE(String rawStr) {
         String ret = encode(rawStr);
         ret = ret.toUpperCase();
         return ret;

@@ -1,20 +1,36 @@
 package com.mj.weather.account.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
+import com.baidu.location.BDLocation;
 import com.mj.weather.R;
-import com.mj.weather.common.base.BaseActivity;
+import com.mj.weather.account.component.DaggerCityListComponent;
+import com.mj.weather.account.contract.CityListContract;
+import com.mj.weather.account.module.CityListViewModule;
+import com.mj.weather.account.presenter.CityListPresenter;
 import com.mj.weather.account.view.CityListFragment;
+import com.mj.weather.common.base.BaseActivity;
+import com.mj.weather.common.common.ActivityUtils;
+import com.mj.weather.common.util.LocationManager;
+
+import javax.inject.Inject;
 
 public class CityListActivity extends BaseActivity {
+    public static final int PARENT_ID = 0;
+    public static final String THE_NAME = "中国";
     private static final String TAG = "CityListActivity";
+    public BDLocation mLocation;
+    @Inject
+    CityListPresenter mCityPresenter;
     private ActionBar actionBar;
+    public ProgressDialog proDialog;
+    private CityListFragment mFragment;
 
     public static void actionStart(Activity act, int requestCode) {
         Intent intent = new Intent(act, CityListActivity.class);
@@ -24,8 +40,9 @@ public class CityListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.citylist_activity);
+        setContentView(R.layout.activity_citylist);
 
+        // toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -34,25 +51,46 @@ public class CityListActivity extends BaseActivity {
         }
 
         //加载Fragment
-        replaceFragment(0, "中国");
+        replaceFragment(PARENT_ID, THE_NAME);
+
+        //getLocation
+        initLocation();
+
+        proDialog = new ProgressDialog(this);
+        proDialog.setMessage("加载中...");
 
     }
 
-    public void replaceFragment(int parentId, String theName) {
-        //actionBar.setTitle(theName);
-        CityListFragment fragment = new CityListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putInt("parentId", parentId);
-        bundle.putString("cityName", theName);
-        fragment.setArguments(bundle);
+    private void initLocation() {
+        LocationManager.startLocation(new LocationManager.OnLocationListener() {
+            @Override
+            public void onLocation(BDLocation location) {
+                mLocation = location;
+                if (proDialog.isShowing()) {
+                    proDialog.dismiss();
+                    mFragment.setResult(location.getCity(), location.getDistrict());
+                }
+                //关闭
+                if (LocationManager.isStart()) {
+                    LocationManager.stopLocation();
+                }
+            }
+        });
+    }
 
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.frame_layout, fragment,parentId+"");
-        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-        if (parentId != 0) {
-            transaction.addToBackStack(null);
-        }
-        transaction.commit();
+    /**
+     * replaceFragment
+     *
+     * @param parentId
+     * @param theName
+     */
+    public void replaceFragment(int parentId, String theName) {
+        mFragment = CityListFragment.newInstance(parentId, theName);
+        ActivityUtils.replaceFragment(getSupportFragmentManager(), mFragment, R.id.frame_layout, parentId);
+
+        DaggerCityListComponent.builder()
+                .cityListViewModule(new CityListViewModule(mFragment))
+                .build()
+                .inject(this);
     }
 }

@@ -7,7 +7,6 @@ import dagger.Provides;
 
 /**
  * Created by MengJie on 2017/6/21.
- *
  */
 @Module
 public class LoginViewModule {

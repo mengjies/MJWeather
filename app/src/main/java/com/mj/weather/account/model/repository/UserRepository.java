@@ -2,16 +2,10 @@ package com.mj.weather.account.model.repository;
 
 import android.os.Process;
 
-import com.mj.weather.account.model.dp.User;
 import com.mj.weather.account.model.dp.UserDao;
 import com.mj.weather.account.model.http.UserApiClient;
 import com.mj.weather.account.model.http.UserProtocol;
 import com.mj.weather.account.model.http.entity.UserBean;
-
-import org.litepal.crud.DataSupport;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import io.reactivex.Observable;
 
@@ -23,6 +17,7 @@ public class UserRepository {
 
     /**
      * 注册
+     *
      * @param username
      * @param password
      * @param email
@@ -38,6 +33,7 @@ public class UserRepository {
 
     /**
      * 登录
+     *
      * @param username
      * @param password
      * @return
@@ -53,6 +49,7 @@ public class UserRepository {
 
     /**
      * 保存User数据
+     *
      * @param username
      * @param password
      * @param rspLogin

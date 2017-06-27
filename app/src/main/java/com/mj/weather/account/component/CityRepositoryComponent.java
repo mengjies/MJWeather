@@ -1,7 +1,7 @@
 package com.mj.weather.account.component;
 
-import com.mj.weather.account.model.repository.CityRepository;
 import com.mj.weather.account.module.CityRepositoryModule;
+import com.mj.weather.account.view.CityListFragment;
 
 import dagger.Component;
 
@@ -11,6 +11,6 @@ import dagger.Component;
 @Component(modules = CityRepositoryModule.class)
 public interface CityRepositoryComponent {
 
-    CityRepository proviceCityRepository();
+    void inject(CityListFragment cityListFragment);
 
 }

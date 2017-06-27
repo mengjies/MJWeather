@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".weather.MainActivity"
+            android:name=".account.activity.MainActivity"
             android:launchMode="singleTask" />
         <activity android:name=".account.activity.CityListActivity" />
         <activity android:name=".account.activity.LoginActivity" />

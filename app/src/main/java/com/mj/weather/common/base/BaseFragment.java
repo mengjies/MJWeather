@@ -23,6 +23,7 @@ public class BaseFragment extends Fragment {
         //统计页面，"MainScreen"为页面名称，可自定义
         MobclickAgent.onPageStart(TAG);
     }
+
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(TAG);
