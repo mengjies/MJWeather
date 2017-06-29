@@ -1,5 +1,6 @@
-package com.mj.weather.account.model.dp;
+package com.mj.weather.account.model.dp.dao;
 
+import com.mj.weather.account.model.dp.entity.User;
 import com.mj.weather.account.model.http.entity.UserBean;
 
 import org.litepal.crud.DataSupport;

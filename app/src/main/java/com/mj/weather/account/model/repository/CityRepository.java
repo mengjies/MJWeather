@@ -2,8 +2,8 @@ package com.mj.weather.account.model.repository;
 
 import android.content.Context;
 
-import com.mj.weather.account.model.dp.CityDao;
-import com.mj.weather.account.model.dp.CityItem;
+import com.mj.weather.account.model.dp.dao.CityDao;
+import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.common.util.JsonUtils;
 
 import java.io.IOException;
@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import io.reactivex.Completable;
+import io.reactivex.Observable;
 
 /**
  * Created by MengJie on 2017/6/23.
@@ -61,7 +62,7 @@ public class CityRepository {
      * @param context
      * @return
      */
-    public Completable initCityDb(Context context) {
+    public Observable<String> initCityDb(Context context) {
         //获取城市json对象
         String json = "";
         InputStream is = null;
@@ -86,10 +87,10 @@ public class CityRepository {
         //添加到数据库
         CityDao.saveAll(cityItemList);
 
-        return Completable.complete();
+        return Observable.just("initDbFinish");
     }
 
-    public boolean isInitCityDb() {
-        return CityDao.isInit();
+    public Observable<Boolean> isInitCityDb() {
+        return Observable.just(CityDao.isInit());
     }
 }

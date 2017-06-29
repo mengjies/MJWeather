@@ -2,8 +2,8 @@ package com.mj.weather.account.model.repository;
 
 import android.os.Process;
 
-import com.mj.weather.account.model.dp.UserDao;
-import com.mj.weather.account.model.http.UserApiClient;
+import com.mj.weather.account.model.dp.dao.UserDao;
+import com.mj.weather.account.model.http.ApiClient;
 import com.mj.weather.account.model.http.UserProtocol;
 import com.mj.weather.account.model.http.entity.UserBean;
 
@@ -27,7 +27,7 @@ public class UserRepository {
         //判断网络
 
         //网络
-        Observable<UserBean.RspRegister> rspRegister = UserApiClient.userService.register(UserProtocol.key, username, password, email);
+        Observable<UserBean.RspRegister> rspRegister = ApiClient.userService.register(UserProtocol.key, username, password, email);
         return rspRegister;
     }
 
@@ -39,11 +39,10 @@ public class UserRepository {
      * @return
      */
     public Observable<UserBean.RspLogin> login(String username, String password) {
-        String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
         //判断网络
 
         //网络
-        Observable<UserBean.RspLogin> rspLogin = UserApiClient.userService.login(UserProtocol.key, username, password);
+        Observable<UserBean.RspLogin> rspLogin = ApiClient.userService.login(UserProtocol.key, username, password);
         return rspLogin;
     }
 

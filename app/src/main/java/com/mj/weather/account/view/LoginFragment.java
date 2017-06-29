@@ -105,12 +105,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
     private void submit() {
         username = etUsername.getText().toString().trim();
         if (!TxtCheckout.isUsername(username)) {
-            ToastUtils.showToast(getContext(), "用户名不合法！");
+            ToastUtils.showToast("用户名不合法！");
             return;
         }
         password = etPassword.getText().toString().trim();
         if (!TxtCheckout.isPassword(password)) {
-            ToastUtils.showToast(getContext(), "密码不合法！");
+            ToastUtils.showToast("密码不合法！大小写字母、下划线、数字、6-16位");
             return;
         }
 
@@ -129,16 +129,11 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         return new Observer<UserBean.RspLogin>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
                 LogUtils.d(TAG, "onSubscribe");
-                if (!d.isDisposed()) {
-                    d.dispose();
-                }
             }
 
             @Override
             public void onNext(@NonNull UserBean.RspLogin rspLogin) {
-                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
                 if (rspLogin != null) {
                     if (rspLogin.retCode.equals("200")) {
                         //友盟账号统计
@@ -150,21 +145,19 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
                         getActivity().finish();
                     } else {
                         LogUtils.e(TAG, rspLogin.msg);
-                        ToastUtils.showToast(getContext(), rspLogin.msg);
+                        ToastUtils.showToast(rspLogin.msg);
                     }
                 }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
                 LogUtils.e(TAG, e.getMessage());
-                ToastUtils.showToast(getContext(), e.getMessage());
+                ToastUtils.showToast(e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                String s = Process.myPid() + " - " + Process.myTid() + " - " + Process.myUid();
                 LogUtils.d(TAG, "onComplete");
             }
         };

@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,8 +12,6 @@ import android.view.WindowManager;
 import com.mj.weather.common.common.ActivityCollector;
 import com.mj.weather.common.common.SystemBarTintManager;
 import com.umeng.analytics.MobclickAgent;
-
-import pub.devrel.easypermissions.EasyPermissions;
 
 
 /**
@@ -59,13 +56,6 @@ public class BaseActivity extends AppCompatActivity {
         // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
         MobclickAgent.onPageEnd("SplashScreen");
         MobclickAgent.onPause(this);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // Forward results to EasyPermission
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
     @Override

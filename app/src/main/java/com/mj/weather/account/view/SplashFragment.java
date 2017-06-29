@@ -13,13 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.mj.weather.R;
+import com.mj.weather.account.activity.MainActivity;
 import com.mj.weather.account.contract.SplashContract;
 import com.mj.weather.common.base.BaseFragment;
 import com.mj.weather.common.util.LogUtils;
-import com.mj.weather.account.activity.MainActivity;
 import com.tbruyelle.rxpermissions2.Permission;
 
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.disposables.Disposable;
@@ -61,11 +60,7 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
         View view = inflater.inflate(R.layout.fragment_splash, container, false);
 
         // 初始化城市列表到数据库
-        if (mSplashPresenter.isInitCityDb()) {
-            mSplashPresenter.initCityDb(getContext());
-        } else {
-            onDbFinished();
-        }
+        mSplashPresenter.initCityDb();
 
         // 初始化权限申请
         String[] permissions = {
@@ -79,44 +74,19 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
     }
 
     @Override
-    public CompletableObserver initDbObserver() {
-        return new CompletableObserver() {
+    public Observer<? super Boolean> initPermsObserver() {
+        return new Observer<Boolean>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
 
             }
 
             @Override
-            public void onComplete() {
-                onDbFinished();
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                LogUtils.e(TAG, e.getMessage());
-            }
-        };
-    }
-
-    @Override
-    public Observer<? super Permission> initPermsObserver() {
-        return new Observer<Permission>() {
-            @Override
-            public void onSubscribe(@NonNull Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(@NonNull Permission permission) {
-                if (permission.granted) {
-                    // `permission.name` is granted !
-                } else if (permission.shouldShowRequestPermissionRationale) {
-                    // Denied permission without ask never again
-                } else {
-                    // Denied permission with ask never again
-                    // Need to go to the settings
-                    //这里暂不处理 用到相关权限时在处理
-                    //showSetPermsDialog();
+            public void onNext(@NonNull Boolean aBoolean) {
+                if(aBoolean){
+                    //全部同意
+                }else{
+                    //至少一个没同意
                 }
             }
 
@@ -127,10 +97,53 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
 
             @Override
             public void onComplete() {
-                LogUtils.e(TAG, "onComplete");
+                LogUtils.d(TAG, "onComplete");
                 onPermsFinished();
             }
         };
+    }
+
+    @Override
+    public Observer<? super Object> initDbObserver() {
+        return new Observer<Object>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull Object o) {
+                LogUtils.i(TAG, o.toString());
+                onDbFinished();
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                LogUtils.e(TAG, e.getMessage());
+            }
+
+            @Override
+            public void onComplete() {
+                LogUtils.i(TAG, "onComplete");
+            }
+        };
+    }
+
+    @Override
+    public void onDbFinished() {
+        isDbFinished = true;
+        onNext();
+    }
+
+    private void onPermsFinished() {
+        isPermsFinished = true;
+        SplashFragment.this.onNext();
+    }
+
+    private void onNext() {
+        if (isDbFinished && isPermsFinished) {
+            MainActivity.actionStart(getActivity());
+        }
     }
 
     private void showSetPermsDialog() {
@@ -152,21 +165,5 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.fromParts("package", getContext().getPackageName(), null));
         startActivityForResult(intent, RC_SETTING_SCREEN);
-    }
-
-    private void onDbFinished() {
-        isDbFinished = true;
-        onNext();
-    }
-
-    private void onPermsFinished() {
-        isPermsFinished = true;
-        SplashFragment.this.onNext();
-    }
-
-    private void onNext() {
-        if (isDbFinished && isPermsFinished) {
-            MainActivity.actionStart(getActivity());
-        }
     }
 }

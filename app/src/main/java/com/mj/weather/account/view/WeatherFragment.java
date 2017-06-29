@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.mj.weather.R;
 import com.mj.weather.account.activity.MainActivity;
+import com.mj.weather.account.contract.WeatherContract;
+import com.mj.weather.account.model.http.entity.HeBean;
 import com.mj.weather.account.view.adapter.AirAdapter;
 import com.mj.weather.account.view.adapter.ForecastAdapter;
 import com.mj.weather.account.view.adapter.TipAdapter;
@@ -21,8 +23,6 @@ import com.mj.weather.common.base.BaseFragment;
 import com.mj.weather.common.common.MyNestedScrollView;
 import com.mj.weather.common.util.LogUtils;
 import com.mj.weather.common.util.ToastUtils;
-import com.mj.weather.account.contract.WeatherContract;
-import com.mj.weather.account.model.http.entity.HeBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,7 +188,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
             if (aqi != null) {
                 aqiList.addAll(HeBean.getAqiList(aqi.city));
             } else {
-                ToastUtils.showTestToast(context, "aqi=null");
+                ToastUtils.showTestToast("aqi=null");
                 LogUtils.e(TAG, "aqi=null");
             }
             airAdapter.notifyDataSetChanged();
@@ -203,7 +203,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
             tipAdapter.notifyDataSetChanged();
 
         } else {
-            ToastUtils.showToast(context, weather.status);
+            ToastUtils.showToast(weather.status);
         }
     }
 

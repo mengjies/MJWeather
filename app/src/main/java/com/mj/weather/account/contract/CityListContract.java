@@ -1,6 +1,6 @@
 package com.mj.weather.account.contract;
 
-import com.mj.weather.account.model.dp.CityItem;
+import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.common.base.BasePresenter;
 import com.mj.weather.common.base.BaseView;
 

@@ -2,7 +2,6 @@ package com.mj.weather.account.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -11,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import com.baidu.location.BDLocation;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerCityListComponent;
-import com.mj.weather.account.contract.CityListContract;
 import com.mj.weather.account.module.CityListViewModule;
 import com.mj.weather.account.presenter.CityListPresenter;
 import com.mj.weather.account.view.CityListFragment;
@@ -54,14 +52,14 @@ public class CityListActivity extends BaseActivity {
         replaceFragment(PARENT_ID, THE_NAME);
 
         //getLocation
-        initLocation();
+        startLocation();
 
         proDialog = new ProgressDialog(this);
         proDialog.setMessage("加载中...");
 
     }
 
-    private void initLocation() {
+    private void startLocation() {
         LocationManager.startLocation(new LocationManager.OnLocationListener() {
             @Override
             public void onLocation(BDLocation location) {
@@ -71,9 +69,7 @@ public class CityListActivity extends BaseActivity {
                     mFragment.setResult(location.getCity(), location.getDistrict());
                 }
                 //关闭
-                if (LocationManager.isStart()) {
-                    LocationManager.stopLocation();
-                }
+                LocationManager.stopLocation();
             }
         });
     }
@@ -92,5 +88,11 @@ public class CityListActivity extends BaseActivity {
                 .cityListViewModule(new CityListViewModule(mFragment))
                 .build()
                 .inject(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocationManager.stopLocation();
     }
 }

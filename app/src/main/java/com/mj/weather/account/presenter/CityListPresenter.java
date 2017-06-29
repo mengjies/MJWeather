@@ -1,7 +1,7 @@
 package com.mj.weather.account.presenter;
 
 import com.mj.weather.account.contract.CityListContract;
-import com.mj.weather.account.model.dp.CityItem;
+import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.account.model.repository.CityRepository;
 
 import java.util.List;

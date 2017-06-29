@@ -105,22 +105,22 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
     private void submit() {
         String username = etUsername.getText().toString().trim();
         if (!TxtCheckout.isUsername(username)) {
-            ToastUtils.showToast(context, "用户名不合法！");
+            ToastUtils.showToast("用户名不合法！");
             return;
         }
         String password = etPassword.getText().toString().trim();
         if (!TxtCheckout.isPassword(password)) {
-            ToastUtils.showToast(context, "密码不合法！");
+            ToastUtils.showToast("密码不合法！大小写字母、下划线、数字、6-16位");
             return;
         }
         String passwordAgain = etPasswordAgain.getText().toString().trim();
         if (!password.equals(passwordAgain)) {
-            ToastUtils.showToast(context, "两次密码不同！");
+            ToastUtils.showToast("两次密码不同！");
             return;
         }
         String email = etEmail.getText().toString().trim();
         if (!TxtCheckout.isEmail(email)) {
-            ToastUtils.showToast(context, "邮箱不合法！");
+            ToastUtils.showToast("邮箱不合法！");
             return;
         }
 
@@ -141,13 +141,13 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
                 if (rspRegister != null) {
                     if (rspRegister.retCode.equals("200")) {
                         //
-                        ToastUtils.showTestToast(context, rspRegister.uid);
+                        ToastUtils.showTestToast(rspRegister.uid);
                         //跳转到登陆页面
                         LoginActivity.actionStart(getActivity());
                         getActivity().finish();
                     } else {
                         LogUtils.e(TAG, rspRegister.msg);
-                        ToastUtils.showToast(context, rspRegister.msg);
+                        ToastUtils.showToast(rspRegister.msg);
                     }
                 }
             }
@@ -155,7 +155,7 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
             @Override
             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
                 LogUtils.e(TAG, e.getMessage());
-                ToastUtils.showToast(context, e.getMessage());
+                ToastUtils.showToast(e.getMessage());
             }
 
             @Override

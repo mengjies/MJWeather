@@ -9,6 +9,7 @@ public class TxtCheckout {
     //"[1]"代表第1位为数字1，"[358]"代表第二位可以为3、5、8中的一个，"\\d{9}"代表后面是可以是0～9的数字，有9位。
     private static final String REGEX_MOBILE = "^[1][3578]\\d{9}";
 
+    //大小写字母、下划线、数字、6-16位
     private static final String REGEX_PASSWORD = "^[a-z0-9A-Z_]{6,16}$";
 
     private static final String REGEX_ID_CARD = "^\\d{15}|\\d{17}[0123456789x]";

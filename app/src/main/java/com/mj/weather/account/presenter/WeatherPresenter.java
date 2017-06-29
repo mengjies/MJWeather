@@ -2,7 +2,7 @@ package com.mj.weather.account.presenter;
 
 import com.mj.weather.common.util.JsonUtils;
 import com.mj.weather.account.contract.WeatherContract;
-import com.mj.weather.account.model.dp.WeatherCache;
+import com.mj.weather.account.model.dp.entity.WeatherCache;
 import com.mj.weather.account.model.http.entity.HeBean;
 import com.mj.weather.account.model.repository.HeRepository;
 
@@ -15,6 +15,7 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by MengJie on 2017/6/25.
+ *
  */
 
 public class WeatherPresenter implements WeatherContract.Presenter {

@@ -20,9 +20,8 @@ import com.baidu.location.BDLocation;
 import com.mj.weather.R;
 import com.mj.weather.account.activity.CityListActivity;
 import com.mj.weather.account.contract.CityListContract;
-import com.mj.weather.account.model.dp.CityItem;
+import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.util.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,15 +2,17 @@ package com.mj.weather;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.StrictMode;
 
-import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.github.moduth.blockcanary.BlockCanary;
 import com.mj.weather.account.component.DaggerUserRepositoryComponent;
 import com.mj.weather.account.component.UserRepositoryComponent;
-import com.mj.weather.account.model.http.UserApiClient;
-import com.mj.weather.common.util.LocationManager;
 import com.mj.weather.account.model.http.ApiClient;
+import com.mj.weather.common.base.AppContext;
+import com.mj.weather.common.util.LocationManager;
+import com.squareup.leakcanary.LeakCanary;
 import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePal;
@@ -23,18 +25,19 @@ import org.litepal.LitePal;
  */
 
 public class MyApplication extends Application {
-    private Context context;
     private static MyApplication instance;
+    private static Context context;
     //Repository
     private static UserRepositoryComponent userRepositoryComponent;
     //百度定位
     public LocationClient mLocationClient;
+    private LocationManager locationListener = new LocationManager();
 
     public static MyApplication getInstance() {
         return instance;
     }
 
-    public Context getContext() {
+    public static Context getContext() {
         return context;
     }
 
@@ -42,6 +45,25 @@ public class MyApplication extends Application {
     public void onCreate() {
         context = this;
         instance = this;
+        //LeakCanary
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+        // Normal app init code...
+
+        //BlockCanary
+        BlockCanary.install(context, new AppContext()).start();
+
+        //strictMode debug中使用
+        if (BuildConfig.DEBUG) {
+            //ThreadPolicy
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
+            //VmPolicy
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
+        }
 
         //初始化LitePal
         LitePal.initialize(context);
@@ -51,22 +73,23 @@ public class MyApplication extends Application {
 
         //初始化自定义APIClient
         ApiClient.init();
-        UserApiClient.init();
 
         // 初始化repository
         userRepositoryComponent = DaggerUserRepositoryComponent.builder().build();
 
         //初始化定位
-        //声明LocationClient类
         mLocationClient = new LocationClient(context);
-        //配置LocationClientOption
         initLocation();
-        //注册监听函数
-        BDLocationListener myListener = new LocationManager();
-        mLocationClient.registerLocationListener(myListener);
+        mLocationClient.registerLocationListener(locationListener);
 
+        super.onCreate();
     }
 
+    /**
+     * userRepository
+     *
+     * @return
+     */
     public UserRepositoryComponent getUserRepositoryComponent() {
         return userRepositoryComponent;
     }

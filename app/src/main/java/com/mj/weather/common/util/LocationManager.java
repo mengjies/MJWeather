@@ -25,7 +25,10 @@ public class LocationManager implements BDLocationListener {
      * 关闭定位
      */
     public static void stopLocation() {
-        MyApplication.getInstance().mLocationClient.stop();
+        if (isStart()) {
+            MyApplication.getInstance().mLocationClient.stop();
+            onLocationListener = null;
+        }
     }
 
     /**

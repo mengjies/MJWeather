@@ -20,7 +20,7 @@ import com.baidu.location.BDLocation;
 import com.bumptech.glide.Glide;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerWeatherComponent;
-import com.mj.weather.account.model.dp.User;
+import com.mj.weather.account.model.dp.entity.User;
 import com.mj.weather.account.module.WeatherViewModule;
 import com.mj.weather.account.presenter.WeatherPresenter;
 import com.mj.weather.account.view.WeatherFragment;
@@ -39,8 +39,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * MainActivity
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     FrameLayout weatherFrame;
     @Inject
     WeatherPresenter mWeatherPresenter;
-    private CircleImageView ivHead;
+    private ImageView ivHead;
     private TextView tvUserName;
     private TextView tvSignOut;
     private int[] imageIds = {R.drawable.img_jessica, R.drawable.img_seohyun, R.drawable.img_yoona, R.drawable.img_hyoyeon,
@@ -139,7 +139,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private void initNavView() {
         View headerView = navView.getHeaderView(0);
-        ivHead = (CircleImageView) headerView.findViewById(R.id.iv_head);
+        ivHead = (ImageView) headerView.findViewById(R.id.iv_head);
         tvUserName = (TextView) headerView.findViewById(R.id.tv_username);
         tvSignOut = (TextView) headerView.findViewById(R.id.tv_sign_out);
 
@@ -152,7 +152,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_settings:
-                        ToastUtils.showToast(MainActivity.this, "设置");
+                        ToastUtils.showToast("设置");
                         break;
                     default:
                         break;
@@ -174,7 +174,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.iv_head:
                 //设置头像
-                ToastUtils.showToast(this, "设置头像！");
+                ToastUtils.showToast("设置头像！");
                 break;
             case R.id.tv_username:
                 LoginActivity.actionStart(this);
@@ -230,10 +230,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 cityName = location.getCity();
                 districtName = location.getDistrict();
                 onLocationChanged();
-
-                if (LocationManager.isStart()) {
-                    LocationManager.stopLocation();
-                }
+                //关闭
+                LocationManager.stopLocation();
             }
         });
     }
@@ -244,6 +242,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     public void loadBackground() {
         int index = new Random().nextInt(imageIds.length);
         Glide.with(this).load(imageIds[index]).bitmapTransform(new BlurTransformation(this, 10)).into(ivBackground);
+    }
+
+    /**
+     * 位置改变
+     */
+    public void onLocationChanged() {
+        actionBar.setTitle(districtName);
+        mWeatherPresenter.getWeather(cityName);
     }
 
     /**
@@ -260,6 +266,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             tvUserName.setEnabled(true);
             tvSignOut.setVisibility(View.GONE);
         }
+        Glide.with(this).load(R.drawable.img_head_default)
+                .bitmapTransform(new CropCircleTransformation(this))
+                .into(ivHead);
     }
 
     /**
@@ -273,21 +282,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         loadUserData();
     }
 
-    /**
-     * 位置改变
-     */
-    public void onLocationChanged() {
-        actionBar.setTitle(districtName);
-        mWeatherPresenter.getWeather(cityName);
-    }
-
     //双击退出应用
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             long secondClick = System.currentTimeMillis();
             if (secondClick - firstClick > 1000) {
-                ToastUtils.showToast(this, "再次点击退出");
+                ToastUtils.showToast("再次点击退出");
                 firstClick = secondClick;
                 return true;
             } else {
@@ -297,5 +298,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        LocationManager.stopLocation();
     }
 }

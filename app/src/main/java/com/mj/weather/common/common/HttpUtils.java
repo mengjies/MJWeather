@@ -1,4 +1,4 @@
-package com.mj.weather.common.http;
+package com.mj.weather.common.common;
 
 import com.mj.weather.common.util.JsonUtils;
 

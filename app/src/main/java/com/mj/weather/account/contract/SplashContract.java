@@ -1,13 +1,10 @@
 package com.mj.weather.account.contract;
 
-import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 
 import com.mj.weather.common.base.BasePresenter;
 import com.mj.weather.common.base.BaseView;
-import com.tbruyelle.rxpermissions2.Permission;
 
-import io.reactivex.CompletableObserver;
 import io.reactivex.Observer;
 
 /**
@@ -17,17 +14,19 @@ import io.reactivex.Observer;
 public class SplashContract {
 
     public interface Presenter extends BasePresenter {
-        void initCityDb(Context context);
+        void initCityDb();
 
         void initPermissions(FragmentActivity activity, String[] permissions);
 
-        boolean isInitCityDb();
     }
 
     public interface View extends BaseView<Presenter> {
-        CompletableObserver initDbObserver();
 
-        Observer<? super Permission> initPermsObserver();
+        void onDbFinished();
+
+        Observer<? super Object> initDbObserver();
+
+        Observer<? super Boolean> initPermsObserver();
     }
 
 

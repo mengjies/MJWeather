@@ -8,11 +8,6 @@ package com.mj.weather.common.base;
 public class AppConfig {
 
     /**
-     * 版本类型
-     */
-    public static final boolean isDebug = true;
-
-    /**
      * log日志打印级别 1-5对应日志的五个级别
      * 1打印所有日志 大于5不打印日志
      */
