@@ -59,3 +59,14 @@
 }
 
 
+# bugly
+-dontwarn com.tencent.bugly.**
+-keep public class com.tencent.bugly.**{*;}
+#support-v4
+ -keep class android.support.**{*;}
+
+
+# nuwa
+-keep class cn.jiajixin.nuwa.** { *; }
+
+

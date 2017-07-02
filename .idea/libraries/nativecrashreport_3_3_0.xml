@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="nativecrashreport-3.3.0">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.android/build-cache/320b99f0197ace5eb4a06759de6cf8a6c590ed52/output/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/320b99f0197ace5eb4a06759de6cf8a6c590ed52/output/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

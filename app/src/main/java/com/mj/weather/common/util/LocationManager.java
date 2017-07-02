@@ -2,7 +2,7 @@ package com.mj.weather.common.util;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
-import com.mj.weather.MyApplication;
+import com.mj.weather.WeatherApplicationLike;
 
 
 /**
@@ -18,7 +18,7 @@ public class LocationManager implements BDLocationListener {
      */
     public static void startLocation(OnLocationListener listener) {
         onLocationListener = listener;
-        MyApplication.getInstance().mLocationClient.start();
+        WeatherApplicationLike.getInstance().mLocationClient.start();
     }
 
     /**
@@ -26,7 +26,7 @@ public class LocationManager implements BDLocationListener {
      */
     public static void stopLocation() {
         if (isStart()) {
-            MyApplication.getInstance().mLocationClient.stop();
+            WeatherApplicationLike.getInstance().mLocationClient.stop();
             onLocationListener = null;
         }
     }
@@ -38,7 +38,7 @@ public class LocationManager implements BDLocationListener {
      * @return
      */
     public static boolean isStart() {
-        return MyApplication.getInstance().mLocationClient.isStarted();
+        return WeatherApplicationLike.getInstance().mLocationClient.isStarted();
     }
 
     @Override

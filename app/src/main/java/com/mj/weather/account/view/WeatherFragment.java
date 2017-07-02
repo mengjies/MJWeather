@@ -21,8 +21,8 @@ import com.mj.weather.account.view.adapter.ForecastAdapter;
 import com.mj.weather.account.view.adapter.TipAdapter;
 import com.mj.weather.common.base.BaseFragment;
 import com.mj.weather.common.common.MyNestedScrollView;
-import com.mj.weather.common.util.LogUtils;
 import com.mj.weather.common.util.ToastUtils;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +145,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
 
             @Override
             public void onError(@NonNull Throwable e) {
-                LogUtils.e(TAG, e.getMessage());
+                Logger.e(e.getMessage());
                 stopRefresh();
             }
 
@@ -171,7 +171,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
                 tvTxtNow.setText(now.cond.txt);
                 tvWindNow.setText("湿度：" + now.hum + "    " + now.wind.dir + "：" + now.wind.sc);
             } else {
-                LogUtils.e(TAG, "now=null");
+                Logger.e("now=null");
             }
 
             List<HeBean.Daily_forecast> forecasts = weather.daily_forecast;
@@ -179,7 +179,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
             if (forecasts != null) {
                 forecastList.addAll(forecasts);
             } else {
-                LogUtils.e(TAG, "forecasts=null");
+                Logger.e("forecasts=null");
             }
             forecastAdapter.notifyDataSetChanged();
 
@@ -189,7 +189,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
                 aqiList.addAll(HeBean.getAqiList(aqi.city));
             } else {
                 ToastUtils.showTestToast("aqi=null");
-                LogUtils.e(TAG, "aqi=null");
+                Logger.e("aqi=null");
             }
             airAdapter.notifyDataSetChanged();
 
@@ -198,7 +198,7 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
             if (suggestion != null) {
                 tipList.addAll(HeBean.getSuggestionList(suggestion));
             } else {
-                LogUtils.e(TAG, "suggestion=null");
+                Logger.e("suggestion=null");
             }
             tipAdapter.notifyDataSetChanged();
 

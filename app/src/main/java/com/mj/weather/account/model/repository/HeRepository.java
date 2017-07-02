@@ -2,14 +2,16 @@ package com.mj.weather.account.model.repository;
 
 import android.text.TextUtils;
 
-import com.mj.weather.MyApplication;
-import com.mj.weather.common.util.JsonUtils;
-import com.mj.weather.common.util.NetWorkUtils;
-import com.mj.weather.account.model.dp.entity.WeatherCache;
+import com.mj.weather.WeatherApplicationLike;
 import com.mj.weather.account.model.dp.dao.WeatherCacheDao;
+import com.mj.weather.account.model.dp.entity.WeatherCache;
 import com.mj.weather.account.model.http.ApiClient;
 import com.mj.weather.account.model.http.HeProtocol;
 import com.mj.weather.account.model.http.entity.HeBean;
+import com.mj.weather.common.util.JsonUtils;
+import com.mj.weather.common.util.NetWorkUtils;
+
+import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
 import io.reactivex.annotations.NonNull;
@@ -28,11 +30,15 @@ public class HeRepository {
      * @return
      */
     public Observable<HeBean.RspWeather> getWeather(final String city) {
-        Observable<HeBean.RspWeather> observable = null;
 
-        if (!NetWorkUtils.isNetworkAvailable(MyApplication.getInstance().getContext())) {
+        if (!NetWorkUtils.isNetworkAvailable(WeatherApplicationLike.getContext())) {
 
-            return Observable.just(WeatherCacheDao.getWeatherByCity(city))
+            return Observable.fromCallable(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    return WeatherCacheDao.getWeatherByCity(city);
+                }
+            })
                     .filter(new Predicate<String>() {
                         @Override
                         public boolean test(@NonNull String s) throws Exception {

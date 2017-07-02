@@ -1,6 +1,7 @@
 package com.mj.weather.account.model.repository;
 
 import android.content.Context;
+import android.os.Process;
 
 import com.mj.weather.account.model.dp.dao.CityDao;
 import com.mj.weather.account.model.dp.entity.CityItem;
@@ -9,6 +10,7 @@ import com.mj.weather.common.util.JsonUtils;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import io.reactivex.Completable;
 import io.reactivex.Observable;
@@ -62,35 +64,46 @@ public class CityRepository {
      * @param context
      * @return
      */
-    public Observable<String> initCityDb(Context context) {
-        //获取城市json对象
-        String json = "";
-        InputStream is = null;
-        try {
-            is = context.getAssets().open("CityList.JSON");
-            byte[] bytes = new byte[is.available()];
-            is.read(bytes);
-            json = new String(bytes);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (is != null) {
+    public Observable<String> initCityDb(final Context context) {
+        return Observable.fromCallable(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                String s = Process.myPid() + "--" + Process.myTid() + "--" + Process.myUid();
+                //获取城市json对象
+                String json = "";
+                InputStream is = null;
                 try {
-                    is.close();
+                    is = context.getAssets().open("CityList.JSON");
+                    byte[] bytes = new byte[is.available()];
+                    is.read(bytes);
+                    json = new String(bytes);
                 } catch (IOException e) {
                     e.printStackTrace();
+                } finally {
+                    if (is != null) {
+                        try {
+                            is.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
+                //获取城市集合
+                List<CityItem> cityItemList = JsonUtils.toObjectArray(json, CityItem[].class);
+                //添加到数据库
+                CityDao.saveAll(cityItemList);
+                return "initDbFinish";
             }
-        }
-        //获取城市集合
-        List<CityItem> cityItemList = JsonUtils.toObjectArray(json, CityItem[].class);
-        //添加到数据库
-        CityDao.saveAll(cityItemList);
-
-        return Observable.just("initDbFinish");
+        });
     }
 
     public Observable<Boolean> isInitCityDb() {
-        return Observable.just(CityDao.isInit());
+        return Observable.fromCallable(new Callable<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                String s = Process.myPid() + "--" + Process.myTid() + "--" + Process.myUid();
+                return CityDao.isInit();
+            }
+        });
     }
 }

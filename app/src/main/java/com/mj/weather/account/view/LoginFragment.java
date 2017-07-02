@@ -1,7 +1,6 @@
 package com.mj.weather.account.view;
 
 import android.os.Bundle;
-import android.os.Process;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,14 +12,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.mj.weather.R;
+import com.mj.weather.account.activity.MainActivity;
 import com.mj.weather.account.activity.SignInActivity;
 import com.mj.weather.account.contract.LoginContract;
 import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.util.LogUtils;
 import com.mj.weather.common.util.ToastUtils;
 import com.mj.weather.common.util.TxtCheckout;
-import com.mj.weather.account.activity.MainActivity;
+import com.orhanobut.logger.Logger;
 import com.umeng.analytics.MobclickAgent;
 
 import io.reactivex.Observer;
@@ -129,7 +128,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
         return new Observer<UserBean.RspLogin>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-                LogUtils.d(TAG, "onSubscribe");
+                Logger.d("onSubscribe");
             }
 
             @Override
@@ -144,7 +143,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
                         MainActivity.actionStart(getActivity());
                         getActivity().finish();
                     } else {
-                        LogUtils.e(TAG, rspLogin.msg);
+                        Logger.e(rspLogin.msg);
                         ToastUtils.showToast(rspLogin.msg);
                     }
                 }
@@ -152,13 +151,13 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
 
             @Override
             public void onError(@NonNull Throwable e) {
-                LogUtils.e(TAG, e.getMessage());
+                Logger.e(e.getMessage());
                 ToastUtils.showToast(e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                LogUtils.d(TAG, "onComplete");
+                Logger.d("onComplete");
             }
         };
     }

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Process;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -16,8 +17,7 @@ import com.mj.weather.R;
 import com.mj.weather.account.activity.MainActivity;
 import com.mj.weather.account.contract.SplashContract;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.util.LogUtils;
-import com.tbruyelle.rxpermissions2.Permission;
+import com.orhanobut.logger.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
@@ -83,21 +83,21 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
 
             @Override
             public void onNext(@NonNull Boolean aBoolean) {
-                if(aBoolean){
+                if (aBoolean) {
                     //全部同意
-                }else{
+                } else {
                     //至少一个没同意
                 }
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                LogUtils.e(TAG, e.getMessage());
+                Logger.e(e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                LogUtils.d(TAG, "onComplete");
+                Logger.d("onComplete");
                 onPermsFinished();
             }
         };
@@ -113,18 +113,19 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
 
             @Override
             public void onNext(@NonNull Object o) {
-                LogUtils.i(TAG, o.toString());
+                String s = Process.myPid() + "--" + Process.myTid() + "--" + Process.myUid();
+                Logger.d(o.toString());
                 onDbFinished();
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                LogUtils.e(TAG, e.getMessage());
+                Logger.e(e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                LogUtils.i(TAG, "onComplete");
+                Logger.d("onComplete");
             }
         };
     }

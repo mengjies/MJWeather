@@ -28,6 +28,7 @@ import com.mj.weather.common.base.BaseActivity;
 import com.mj.weather.common.common.ActivityUtils;
 import com.mj.weather.common.util.LocationManager;
 import com.mj.weather.common.util.ToastUtils;
+import com.tencent.bugly.crashreport.CrashReport;
 import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.crud.DataSupport;
@@ -49,7 +50,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-    public ActionBar actionBar;
+    private ActionBar actionBar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
@@ -65,8 +66,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private ImageView ivHead;
     private TextView tvUserName;
     private TextView tvSignOut;
-    private int[] imageIds = {R.drawable.img_jessica, R.drawable.img_seohyun, R.drawable.img_yoona, R.drawable.img_hyoyeon,
-            R.drawable.img_sooyoung, R.drawable.img_sunny, R.drawable.img_taeyeon, R.drawable.img_tiffany, R.drawable.img_yuri};
+    private int[] imageIds = {R.drawable.img_jessica, R.drawable.img_seohyun, R.drawable.img_yoona,
+            R.drawable.img_hyoyeon, R.drawable.img_sooyoung, R.drawable.img_sunny,
+            R.drawable.img_taeyeon, R.drawable.img_tiffany, R.drawable.img_yuri};
     private WeatherFragment weatherFragment;
     private long firstClick = 0;
     private String cityName;
@@ -152,7 +154,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.menu_settings:
-                        ToastUtils.showToast("设置");
+                        //ToastUtils.showToast("设置");
+                        CrashReport.testJavaCrash();
                         break;
                     default:
                         break;
@@ -185,6 +188,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case android.R.id.title:
             case android.R.id.icon:
                 CityListActivity.actionStart(this, 1);
+                break;
             default:
                 break;
         }

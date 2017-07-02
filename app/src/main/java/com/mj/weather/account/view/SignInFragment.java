@@ -18,9 +18,9 @@ import com.mj.weather.account.activity.LoginActivity;
 import com.mj.weather.account.contract.SignInContract;
 import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.util.LogUtils;
 import com.mj.weather.common.util.ToastUtils;
 import com.mj.weather.common.util.TxtCheckout;
+import com.orhanobut.logger.Logger;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -41,6 +41,10 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
     private SignInContract.Presenter mPresenter;
     private Context context;
 
+    public static SignInFragment newInstance() {
+        return new SignInFragment();
+    }
+
     @Override
     public void setPresenter(@NonNull SignInContract.Presenter presenter) {
         mPresenter = presenter;
@@ -50,10 +54,6 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
     public void onResume() {
         super.onResume();
         mPresenter.start();
-    }
-
-    public static SignInFragment newInstance() {
-        return new SignInFragment();
     }
 
     @Nullable
@@ -146,7 +146,7 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
                         LoginActivity.actionStart(getActivity());
                         getActivity().finish();
                     } else {
-                        LogUtils.e(TAG, rspRegister.msg);
+                        Logger.e(rspRegister.msg);
                         ToastUtils.showToast(rspRegister.msg);
                     }
                 }
@@ -154,13 +154,13 @@ public class SignInFragment extends BaseFragment implements SignInContract.View,
 
             @Override
             public void onError(@io.reactivex.annotations.NonNull Throwable e) {
-                LogUtils.e(TAG, e.getMessage());
+                Logger.e(e.getMessage());
                 ToastUtils.showToast(e.getMessage());
             }
 
             @Override
             public void onComplete() {
-
+                Logger.d("onComplete");
             }
         };
     }

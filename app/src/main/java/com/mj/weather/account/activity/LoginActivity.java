@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.mj.weather.MyApplication;
+import com.mj.weather.WeatherApplicationLike;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerLoginComponent;
 import com.mj.weather.account.module.LoginViewModule;
@@ -54,7 +54,7 @@ public class LoginActivity extends BaseActivity {
         //dagger build
         DaggerLoginComponent.builder()
                 .loginViewModule(new LoginViewModule(loginFragment))
-                .userRepositoryComponent(((MyApplication) getApplication()).getUserRepositoryComponent())
+                .userRepositoryComponent(WeatherApplicationLike.getInstance().getUserRepositoryComponent())
                 .build()
                 .inject(this);
 

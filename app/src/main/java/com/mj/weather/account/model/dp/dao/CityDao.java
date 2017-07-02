@@ -1,5 +1,7 @@
 package com.mj.weather.account.model.dp.dao;
 
+import android.os.Process;
+
 import com.mj.weather.account.model.dp.entity.CityItem;
 
 import org.litepal.crud.DataSupport;

@@ -1,8 +1,13 @@
 package com.mj.weather;
 
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.StrictMode;
+import android.support.multidex.MultiDex;
+import android.text.TextUtils;
 
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
@@ -12,20 +17,27 @@ import com.mj.weather.account.component.UserRepositoryComponent;
 import com.mj.weather.account.model.http.ApiClient;
 import com.mj.weather.common.base.AppContext;
 import com.mj.weather.common.util.LocationManager;
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
+import com.tencent.bugly.beta.Beta;
+import com.tencent.bugly.crashreport.CrashReport;
+import com.tencent.tinker.loader.app.DefaultApplicationLike;
 import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePal;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 /**
  * Created by MengJie on 2017/1/11.
- * 获取全局Context
- * 初始化LitePal
- * 友盟场景类型设置接口
  */
 
-public class MyApplication extends Application {
-    private static MyApplication instance;
+public class WeatherApplicationLike extends DefaultApplicationLike {
+    private static final String TAG = "WeatherApplicationLike";
+    private static WeatherApplicationLike instance;
     private static Context context;
     //Repository
     private static UserRepositoryComponent userRepositoryComponent;
@@ -33,7 +45,12 @@ public class MyApplication extends Application {
     public LocationClient mLocationClient;
     private LocationManager locationListener = new LocationManager();
 
-    public static MyApplication getInstance() {
+    //
+    public WeatherApplicationLike(Application application, int tinkerFlags, boolean tinkerLoadVerifyFlag, long applicationStartElapsedTime, long applicationStartMillisTime, Intent tinkerResultIntent) {
+        super(application, tinkerFlags, tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime, tinkerResultIntent);
+    }
+
+    public static WeatherApplicationLike getInstance() {
         return instance;
     }
 
@@ -41,17 +58,46 @@ public class MyApplication extends Application {
         return context;
     }
 
+    /**
+     * 获取进程号对应的进程名
+     *
+     * @param pid 进程号
+     * @return 进程名
+     */
+    private static String getProcessName(int pid) {
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader("/proc/" + pid + "/cmdline"));
+            String processName = reader.readLine();
+            if (!TextUtils.isEmpty(processName)) {
+                processName = processName.trim();
+            }
+            return processName;
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return null;
+    }
+
     @Override
     public void onCreate() {
-        context = this;
+        context = getApplication().getApplicationContext();
         instance = this;
         //LeakCanary
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        if (LeakCanary.isInAnalyzerProcess(context)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        LeakCanary.install(getApplication());
         // Normal app init code...
 
         //BlockCanary
@@ -64,6 +110,22 @@ public class MyApplication extends Application {
             //VmPolicy
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
+
+        //Logger初始化 debug中开启
+        Logger.addLogAdapter(new AndroidLogAdapter() {
+            @Override
+            public boolean isLoggable(int priority, String tag) {
+                return BuildConfig.DEBUG;
+            }
+        });
+
+        //bugly crash上报
+        String packageName = context.getPackageName();// 获取当前包名
+        String processName = getProcessName(android.os.Process.myPid());// 获取当前进程名
+        CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
+        strategy.setUploadProcess(processName == null || processName.equals(packageName));// 设置是否为上报进程
+        CrashReport.initCrashReport(context, "40f4a663b3", true);
+
 
         //初始化LitePal
         LitePal.initialize(context);
@@ -85,6 +147,23 @@ public class MyApplication extends Application {
         super.onCreate();
     }
 
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    @Override
+    public void onBaseContextAttached(Context base) {
+        super.onBaseContextAttached(base);
+        // you must install multiDex whatever tinker is installed!
+        MultiDex.install(base);
+
+        // 安装tinker
+        // TinkerManager.installTinker(this); 替换成下面Bugly提供的方法
+        Beta.installTinker(this);
+    }
+
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public void registerActivityLifecycleCallback(Application.ActivityLifecycleCallbacks callbacks) {
+        getApplication().registerActivityLifecycleCallbacks(callbacks);
+    }
+
     /**
      * userRepository
      *
@@ -93,7 +172,6 @@ public class MyApplication extends Application {
     public UserRepositoryComponent getUserRepositoryComponent() {
         return userRepositoryComponent;
     }
-
 
     private void initLocation() {
         LocationClientOption option = new LocationClientOption();
