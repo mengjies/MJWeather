@@ -4,12 +4,11 @@ import android.os.Bundle;
 
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerSplashComponent;
-import com.mj.weather.account.contract.SplashContract;
 import com.mj.weather.account.module.SplashViewModule;
 import com.mj.weather.account.presenter.SplashPresenter;
 import com.mj.weather.account.view.SplashFragment;
 import com.mj.weather.common.base.BaseActivity;
-import com.mj.weather.common.common.ActivityUtils;
+import com.mj.weather.common.util.ActivityUtils;
 
 import javax.inject.Inject;
 

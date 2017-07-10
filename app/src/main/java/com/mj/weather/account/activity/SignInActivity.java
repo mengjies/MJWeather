@@ -7,14 +7,14 @@ import android.os.PersistableBundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.mj.weather.WeatherApplicationLike;
+import com.mj.weather.SampleApplicationLike;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerSignInComponent;
 import com.mj.weather.account.module.SignInViewModule;
 import com.mj.weather.account.presenter.SignInPresenter;
 import com.mj.weather.account.view.SignInFragment;
 import com.mj.weather.common.base.BaseActivity;
-import com.mj.weather.common.common.ActivityUtils;
+import com.mj.weather.common.util.ActivityUtils;
 
 import javax.inject.Inject;
 
@@ -55,7 +55,7 @@ public class SignInActivity extends BaseActivity {
         //dagger
         DaggerSignInComponent.builder()
                 .signInViewModule(new SignInViewModule(signInFragment))
-                .userRepositoryComponent(WeatherApplicationLike.getInstance().getUserRepositoryComponent())
+                .userRepositoryComponent(SampleApplicationLike.getInstance().getUserRepositoryComponent())
                 .build()
                 .inject(this);
 

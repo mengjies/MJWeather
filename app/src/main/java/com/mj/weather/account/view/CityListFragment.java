@@ -22,6 +22,8 @@ import com.mj.weather.account.activity.CityListActivity;
 import com.mj.weather.account.contract.CityListContract;
 import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.common.base.BaseFragment;
+import com.mj.weather.common.util.NetWorkUtils;
+import com.mj.weather.common.common.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,10 +127,12 @@ public class CityListFragment extends BaseFragment implements CityListContract.V
                 break;
             case R.id.menu_location:
                 BDLocation location = activity.mLocation;
-                if (location != null) {
+                if (!NetWorkUtils.isNetworkAvailable(getContext())) {
+                    ToastUtils.showToast("网络异常！");
+                } else if (location != null) {
                     setResult(location.getCity(), location.getDistrict());
                 } else {
-                    activity.proDialog.show();
+                    setResult("", "");
                 }
                 break;
         }

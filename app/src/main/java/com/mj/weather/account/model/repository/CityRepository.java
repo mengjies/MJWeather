@@ -5,14 +5,14 @@ import android.os.Process;
 
 import com.mj.weather.account.model.dp.dao.CityDao;
 import com.mj.weather.account.model.dp.entity.CityItem;
-import com.mj.weather.common.util.JsonUtils;
+import com.mj.weather.common.common.JsonUtils;
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import io.reactivex.Completable;
 import io.reactivex.Observable;
 
 /**
@@ -21,11 +21,11 @@ import io.reactivex.Observable;
 public class CityRepository {
     private static CityRepository ourInstance = new CityRepository();
 
-    public static CityRepository getInstance() {
-        return ourInstance;
+    private CityRepository() {
     }
 
-    private CityRepository() {
+    public static CityRepository getInstance() {
+        return ourInstance;
     }
 
     /**
@@ -68,7 +68,7 @@ public class CityRepository {
         return Observable.fromCallable(new Callable<String>() {
             @Override
             public String call() throws Exception {
-                String s = Process.myPid() + "--" + Process.myTid() + "--" + Process.myUid();
+                Logger.d("pid:" + Process.myPid() + "\n" + "tid:" + Process.myTid() + "\n" + "uid:" + Process.myUid() + "\n");
                 //获取城市json对象
                 String json = "";
                 InputStream is = null;
@@ -101,7 +101,7 @@ public class CityRepository {
         return Observable.fromCallable(new Callable<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                String s = Process.myPid() + "--" + Process.myTid() + "--" + Process.myUid();
+                Logger.d("pid:" + Process.myPid() + "\n" + "tid:" + Process.myTid() + "\n" + "uid:" + Process.myUid() + "\n");
                 return CityDao.isInit();
             }
         });

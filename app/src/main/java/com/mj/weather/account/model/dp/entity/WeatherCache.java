@@ -11,6 +11,7 @@ public class WeatherCache extends DataSupport {
 
     @Column
     public String city;
+    public String district;
     public String json;
 
 }

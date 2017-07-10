@@ -1,4 +1,4 @@
-package com.mj.weather.common.common;
+package com.mj.weather.common.util;
 
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;

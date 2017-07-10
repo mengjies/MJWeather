@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.mj.weather.common.common;
+package com.mj.weather.common.util;
 
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;

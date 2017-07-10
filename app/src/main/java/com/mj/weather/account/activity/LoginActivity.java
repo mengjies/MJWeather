@@ -6,14 +6,14 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 
-import com.mj.weather.WeatherApplicationLike;
+import com.mj.weather.SampleApplicationLike;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerLoginComponent;
 import com.mj.weather.account.module.LoginViewModule;
 import com.mj.weather.account.presenter.LoginPresenter;
 import com.mj.weather.account.view.LoginFragment;
 import com.mj.weather.common.base.BaseActivity;
-import com.mj.weather.common.common.ActivityUtils;
+import com.mj.weather.common.util.ActivityUtils;
 
 import javax.inject.Inject;
 
@@ -54,7 +54,7 @@ public class LoginActivity extends BaseActivity {
         //dagger build
         DaggerLoginComponent.builder()
                 .loginViewModule(new LoginViewModule(loginFragment))
-                .userRepositoryComponent(WeatherApplicationLike.getInstance().getUserRepositoryComponent())
+                .userRepositoryComponent(SampleApplicationLike.getInstance().getUserRepositoryComponent())
                 .build()
                 .inject(this);
 

@@ -1,4 +1,4 @@
-package com.mj.weather.common.util;
+package com.mj.weather.common.common;
 
 import android.support.annotation.NonNull;
 import android.util.Base64;

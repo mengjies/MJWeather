@@ -1,8 +1,11 @@
 package com.mj.weather.account.presenter;
 
+import android.content.Context;
+
 import com.mj.weather.account.contract.CityListContract;
 import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.account.model.repository.CityRepository;
+import com.mj.weather.common.util.NetWorkUtils;
 
 import java.util.List;
 
@@ -48,4 +51,6 @@ public class CityListPresenter implements CityListContract.Presenter {
     public CityItem getCityById(int parentID) {
         return mCityRepository.getCityById(parentID);
     }
+
+
 }

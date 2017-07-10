@@ -5,6 +5,7 @@ import com.mj.weather.common.base.BaseView;
 import com.mj.weather.account.model.http.entity.HeBean;
 
 import io.reactivex.Observer;
+import io.reactivex.functions.Consumer;
 
 /**
  * Created by MengJie on 2017/6/25.
@@ -13,7 +14,7 @@ import io.reactivex.Observer;
 public class WeatherContract {
 
     public interface Presenter extends BasePresenter {
-        void getWeather(String cityName);
+        void getWeather(String cityName, String districtName);
 
         void getWeatherCache();
     }
@@ -21,7 +22,11 @@ public class WeatherContract {
     public interface View extends BaseView<Presenter> {
         Observer<? super HeBean.RspWeather> weatherObserver();
 
-        void setTitle(String city);
+        Observer<? super HeBean.RspWeather> weatherCacheObserver();
+
+        void setCity(String city, String district);
+
+        void stopRefresh();
     }
 
 

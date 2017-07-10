@@ -9,9 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.mj.weather.common.common.ActivityCollector;
-import com.mj.weather.common.common.SystemBarTintManager;
-import com.umeng.analytics.MobclickAgent;
+import com.mj.weather.common.util.ActivityCollector;
+import com.mj.weather.common.util.SystemBarTintManager;
 
 
 /**
@@ -44,18 +43,11 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        //统计页面(仅有Activity的应用中SDK自动调用，不需要单独写。"SplashScreen"为页面名称，可自定义)
-        MobclickAgent.onPageStart(TAG);
-        //统计时长
-        MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        // （仅有Activity的应用中SDK自动调用，不需要单独写）保证 onPageEnd 在onPause 之前调用,因为 onPause 中会保存信息。"SplashScreen"为页面名称，可自定义
-        MobclickAgent.onPageEnd("SplashScreen");
-        MobclickAgent.onPause(this);
     }
 
     @Override

@@ -1,9 +1,9 @@
-package com.mj.weather.common.util;
+package com.mj.weather.common.common;
 
 import android.widget.Toast;
 
 import com.mj.weather.BuildConfig;
-import com.mj.weather.WeatherApplicationLike;
+import com.mj.weather.SampleApplicationLike;
 
 
 /**
@@ -15,7 +15,7 @@ public class ToastUtils {
 
     public static void showToast(String msg, int duration) {
         if (toast == null) {
-            toast = Toast.makeText(WeatherApplicationLike.getContext(), msg, duration);
+            toast = Toast.makeText(SampleApplicationLike.getContext(), msg, duration);
         } else {
             toast.setText(msg);
         }

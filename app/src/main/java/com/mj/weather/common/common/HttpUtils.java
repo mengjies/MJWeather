@@ -1,6 +1,6 @@
 package com.mj.weather.common.common;
 
-import com.mj.weather.common.util.JsonUtils;
+import com.mj.weather.common.util.SSLUtils;
 
 import java.io.InputStream;
 import java.util.concurrent.TimeUnit;

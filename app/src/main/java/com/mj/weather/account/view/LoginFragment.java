@@ -17,10 +17,9 @@ import com.mj.weather.account.activity.SignInActivity;
 import com.mj.weather.account.contract.LoginContract;
 import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.util.ToastUtils;
+import com.mj.weather.common.common.ToastUtils;
 import com.mj.weather.common.util.TxtCheckout;
 import com.orhanobut.logger.Logger;
-import com.umeng.analytics.MobclickAgent;
 
 import io.reactivex.Observer;
 import io.reactivex.annotations.NonNull;
@@ -135,8 +134,6 @@ public class LoginFragment extends BaseFragment implements LoginContract.View, V
             public void onNext(@NonNull UserBean.RspLogin rspLogin) {
                 if (rspLogin != null) {
                     if (rspLogin.retCode.equals("200")) {
-                        //友盟账号统计
-                        MobclickAgent.onProfileSignIn(username);
                         //保存数据
                         mPresenter.saveLoginData(username, password, rspLogin);
                         //跳转到MainActivity

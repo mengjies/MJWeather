@@ -1,5 +1,7 @@
 package com.mj.weather.account.contract;
 
+import android.content.Context;
+
 import com.mj.weather.account.model.dp.entity.CityItem;
 import com.mj.weather.common.base.BasePresenter;
 import com.mj.weather.common.base.BaseView;
@@ -20,6 +22,7 @@ public class CityListContract {
         boolean hasChildren(int areaID);
 
         CityItem getCityById(int parentID);
+
     }
 
     public interface View extends BaseView<Presenter> {

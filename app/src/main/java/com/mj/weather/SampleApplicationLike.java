@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.StrictMode;
 import android.support.multidex.MultiDex;
 import android.text.TextUtils;
 
@@ -16,14 +15,13 @@ import com.mj.weather.account.component.DaggerUserRepositoryComponent;
 import com.mj.weather.account.component.UserRepositoryComponent;
 import com.mj.weather.account.model.http.ApiClient;
 import com.mj.weather.common.base.AppContext;
-import com.mj.weather.common.util.LocationManager;
+import com.mj.weather.common.common.LocationManager;
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
 import com.squareup.leakcanary.LeakCanary;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.crashreport.CrashReport;
 import com.tencent.tinker.loader.app.DefaultApplicationLike;
-import com.umeng.analytics.MobclickAgent;
 
 import org.litepal.LitePal;
 
@@ -35,9 +33,9 @@ import java.io.IOException;
  * Created by MengJie on 2017/1/11.
  */
 
-public class WeatherApplicationLike extends DefaultApplicationLike {
-    private static final String TAG = "WeatherApplicationLike";
-    private static WeatherApplicationLike instance;
+public class SampleApplicationLike extends DefaultApplicationLike {
+    private static final String TAG = "SampleApplicationLike";
+    private static SampleApplicationLike instance;
     private static Context context;
     //Repository
     private static UserRepositoryComponent userRepositoryComponent;
@@ -46,11 +44,14 @@ public class WeatherApplicationLike extends DefaultApplicationLike {
     private LocationManager locationListener = new LocationManager();
 
     //
-    public WeatherApplicationLike(Application application, int tinkerFlags, boolean tinkerLoadVerifyFlag, long applicationStartElapsedTime, long applicationStartMillisTime, Intent tinkerResultIntent) {
-        super(application, tinkerFlags, tinkerLoadVerifyFlag, applicationStartElapsedTime, applicationStartMillisTime, tinkerResultIntent);
+    public SampleApplicationLike(Application application, int tinkerFlags, boolean tinkerLoadVerifyFlag,
+                                 long applicationStartElapsedTime, long applicationStartMillisTime,
+                                 Intent tinkerResultIntent) {
+        super(application, tinkerFlags, tinkerLoadVerifyFlag, applicationStartElapsedTime,
+                applicationStartMillisTime, tinkerResultIntent);
     }
 
-    public static WeatherApplicationLike getInstance() {
+    public static SampleApplicationLike getInstance() {
         return instance;
     }
 
@@ -106,9 +107,9 @@ public class WeatherApplicationLike extends DefaultApplicationLike {
         //strictMode debug中使用
         if (BuildConfig.DEBUG) {
             //ThreadPolicy
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
+            //StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
             //VmPolicy
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
+            //StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
         }
 
         //Logger初始化 debug中开启
@@ -124,14 +125,11 @@ public class WeatherApplicationLike extends DefaultApplicationLike {
         String processName = getProcessName(android.os.Process.myPid());// 获取当前进程名
         CrashReport.UserStrategy strategy = new CrashReport.UserStrategy(context);
         strategy.setUploadProcess(processName == null || processName.equals(packageName));// 设置是否为上报进程
-        CrashReport.initCrashReport(context, "40f4a663b3", true);
+        CrashReport.initCrashReport(context, "40f4a663b3", BuildConfig.DEBUG);
 
 
         //初始化LitePal
         LitePal.initialize(context);
-
-        //友盟场景类型设置接口
-        MobclickAgent.setScenarioType(context, MobclickAgent.EScenarioType.E_UM_NORMAL);
 
         //初始化自定义APIClient
         ApiClient.init();
@@ -165,7 +163,7 @@ public class WeatherApplicationLike extends DefaultApplicationLike {
     }
 
     /**
-     * userRepository
+     * 获取userRepositoryComponent
      *
      * @return
      */
@@ -173,6 +171,9 @@ public class WeatherApplicationLike extends DefaultApplicationLike {
         return userRepositoryComponent;
     }
 
+    /**
+     * 初始化定位配置
+     */
     private void initLocation() {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备

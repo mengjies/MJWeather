@@ -44,7 +44,7 @@
   public *;
 }
 # for DexGuard only
--keepresourcexmlelements manifest/application/meta-data@value=GlideModule
+#-keepresourcexmlelements manifest/application/meta-data@value=GlideModule
 
 
 #   EventBus
@@ -63,10 +63,4 @@
 -dontwarn com.tencent.bugly.**
 -keep public class com.tencent.bugly.**{*;}
 #support-v4
- -keep class android.support.**{*;}
-
-
-# nuwa
--keep class cn.jiajixin.nuwa.** { *; }
-
-
+-keep class android.support.**{*;}

@@ -97,7 +97,7 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
 
             @Override
             public void onComplete() {
-                Logger.d("onComplete");
+                Logger.d("onComplete!");
                 onPermsFinished();
             }
         };
@@ -121,11 +121,13 @@ public class SplashFragment extends BaseFragment implements SplashContract.View 
             @Override
             public void onError(@NonNull Throwable e) {
                 Logger.e(e.getMessage());
+                onDbFinished();
             }
 
             @Override
             public void onComplete() {
-                Logger.d("onComplete");
+                Logger.d("onComplete!");
+                onDbFinished();
             }
         };
     }

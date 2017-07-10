@@ -1,14 +1,19 @@
 package com.mj.weather.account.activity;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,16 +26,19 @@ import com.bumptech.glide.Glide;
 import com.mj.weather.R;
 import com.mj.weather.account.component.DaggerWeatherComponent;
 import com.mj.weather.account.model.dp.entity.User;
+import com.mj.weather.account.model.event.WEvent;
 import com.mj.weather.account.module.WeatherViewModule;
 import com.mj.weather.account.presenter.WeatherPresenter;
+import com.mj.weather.account.receiver.AlarmReceiver;
 import com.mj.weather.account.view.WeatherFragment;
 import com.mj.weather.common.base.BaseActivity;
-import com.mj.weather.common.common.ActivityUtils;
-import com.mj.weather.common.util.LocationManager;
-import com.mj.weather.common.util.ToastUtils;
-import com.tencent.bugly.crashreport.CrashReport;
-import com.umeng.analytics.MobclickAgent;
+import com.mj.weather.common.bug.BugClass;
+import com.mj.weather.common.util.ActivityUtils;
+import com.mj.weather.common.common.ToastUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
 
 import java.lang.reflect.Field;
@@ -50,7 +58,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  */
 public class MainActivity extends BaseActivity implements View.OnClickListener {
     private static final String TAG = "MainActivity";
-    private ActionBar actionBar;
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
     @BindView(R.id.nav_view)
@@ -63,6 +70,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     FrameLayout weatherFrame;
     @Inject
     WeatherPresenter mWeatherPresenter;
+    private ActionBar actionBar;
     private ImageView ivHead;
     private TextView tvUserName;
     private TextView tvSignOut;
@@ -71,8 +79,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             R.drawable.img_taeyeon, R.drawable.img_tiffany, R.drawable.img_yuri};
     private WeatherFragment weatherFragment;
     private long firstClick = 0;
-    private String cityName;
-    private String districtName;
+    private BDLocation mLocation;
+    private AlarmManager alarmManager;
+    private PendingIntent alarmIntent;
 
     public static void actionStart(Activity act) {
         Intent intent = new Intent(act, MainActivity.class);
@@ -106,8 +115,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         mWeatherPresenter.getWeatherCache();
         //加载背景
         loadBackground();
-        //开始定位
-        startLocation();
+        //这里放在onCreate() 只接收一次 然后注销
+        EventBus.getDefault().register(this);
+
+        //开启定位服务
+        startLocationService();
 
     }
 
@@ -155,7 +167,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 switch (item.getItemId()) {
                     case R.id.menu_settings:
                         //ToastUtils.showToast("设置");
-                        CrashReport.testJavaCrash();
+                        new BugClass().bug();
                         break;
                     default:
                         break;
@@ -185,10 +197,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case R.id.tv_sign_out:
                 signOut();
                 break;
-            case android.R.id.title:
-            case android.R.id.icon:
-                CityListActivity.actionStart(this, 1);
-                break;
             default:
                 break;
         }
@@ -200,9 +208,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case 1:
-                    cityName = data.getStringExtra("cityName");
-                    districtName = data.getStringExtra("districtName");
-                    onLocationChanged();
+                    String cityName = data.getStringExtra("cityName");
+                    String districtName = data.getStringExtra("districtName");
+                    if (TextUtils.isEmpty(cityName)) {
+                        cityName = mLocation.getCity();
+                        districtName = mLocation.getDistrict();
+                    }
+                    mWeatherPresenter.getWeather(cityName, districtName);
                     break;
             }
         }
@@ -217,6 +229,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 break;
+            case android.R.id.icon:
+                CityListActivity.actionStart(this, 1);
+                break;
             default:
                 break;
         }
@@ -225,35 +240,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     /**
-     * 定位
-     */
-    public void startLocation() {
-        LocationManager.startLocation(new LocationManager.OnLocationListener() {
-            @Override
-            public void onLocation(BDLocation location) {
-                cityName = location.getCity();
-                districtName = location.getDistrict();
-                onLocationChanged();
-                //关闭
-                LocationManager.stopLocation();
-            }
-        });
-    }
-
-    /**
      * 加载背景
      */
     public void loadBackground() {
         int index = new Random().nextInt(imageIds.length);
         Glide.with(this).load(imageIds[index]).bitmapTransform(new BlurTransformation(this, 10)).into(ivBackground);
-    }
-
-    /**
-     * 位置改变
-     */
-    public void onLocationChanged() {
-        actionBar.setTitle(districtName);
-        mWeatherPresenter.getWeather(cityName);
     }
 
     /**
@@ -276,11 +267,24 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     /**
+     * 开启定位服务
+     * 15分钟定位一次
+     */
+    private void startLocationService() {
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        intent.setAction("com.mj.weather.location");
+        //设置Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+        intent.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
+        alarmIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime()
+                , AlarmManager.INTERVAL_FIFTEEN_MINUTES, alarmIntent);
+    }
+
+    /**
      * 退出登录
      */
     private void signOut() {
-        //停止账号统计
-        MobclickAgent.onProfileSignOff();
         //删除用户数据
         DataSupport.deleteAll(User.class);
         loadUserData();
@@ -304,9 +308,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return super.onKeyDown(keyCode, event);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onLocationEvent(WEvent.LocationEvent event) {
+        //只执行一次
+        mLocation = event.location;
+        mWeatherPresenter.getWeather(mLocation.getCity(), mLocation.getDistrict());
+        //注销
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
-    protected void onPause() {
-        super.onPause();
-        LocationManager.stopLocation();
+    protected void onDestroy() {
+        super.onDestroy();
+        //EventBus.getDefault().unregister(this);//接收到定位数据时已注销
+        //关闭定位服务
+        if (alarmManager != null) {
+            alarmManager.cancel(alarmIntent);
+        }
     }
 }

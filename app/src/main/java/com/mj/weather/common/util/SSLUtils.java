@@ -1,4 +1,4 @@
-package com.mj.weather.common.common;
+package com.mj.weather.common.util;
 
 import com.orhanobut.logger.Logger;
 

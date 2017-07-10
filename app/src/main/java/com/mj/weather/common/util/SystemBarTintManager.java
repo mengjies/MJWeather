@@ -1,4 +1,4 @@
-package com.mj.weather.common.common;
+package com.mj.weather.common.util;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;

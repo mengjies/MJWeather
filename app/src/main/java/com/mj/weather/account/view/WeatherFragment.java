@@ -21,7 +21,7 @@ import com.mj.weather.account.view.adapter.ForecastAdapter;
 import com.mj.weather.account.view.adapter.TipAdapter;
 import com.mj.weather.common.base.BaseFragment;
 import com.mj.weather.common.common.MyNestedScrollView;
-import com.mj.weather.common.util.ToastUtils;
+import com.mj.weather.common.common.ToastUtils;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -68,6 +68,8 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
     private AirAdapter airAdapter;
     private TipAdapter tipAdapter;
     private MainActivity activity;
+    private String cityName;
+    private String districtName;
 
     public static WeatherFragment newInstance() {
         return new WeatherFragment();
@@ -124,14 +126,50 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
             @Override
             public void onRefresh() {
                 //然后刷新数据 刷新背景
-                activity.onLocationChanged();
+                mPresenter.getWeather(cityName, districtName);
                 activity.loadBackground();
             }
         });
     }
 
+    /**
+     * weatherObserver
+     * @return
+     */
     @Override
     public Observer<? super HeBean.RspWeather> weatherObserver() {
+        return new Observer<HeBean.RspWeather>() {
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull HeBean.RspWeather rspWeather) {
+                stopRefresh();
+                loadWeather(rspWeather);
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+                Logger.e(e.getMessage());
+                ToastUtils.showToast(e.getMessage());
+                stopRefresh();
+            }
+
+            @Override
+            public void onComplete() {
+                stopRefresh();
+            }
+        };
+    }
+
+    /**
+     * weatherCacheObserver
+     * @return
+     */
+    @Override
+    public Observer<? super HeBean.RspWeather> weatherCacheObserver() {
         return new Observer<HeBean.RspWeather>() {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
@@ -145,24 +183,23 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Logger.e(e.getMessage());
-                stopRefresh();
+                Logger.d(e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                stopRefresh();
             }
         };
     }
 
     @Override
-    public void setTitle(String city) {
-        activity.setTitle(city);
+    public void setCity(String city, String district) {
+        cityName = city;
+        districtName = district;
+        activity.setTitle(district);
     }
 
     private void loadWeather(HeBean.RspWeather rspWeather) {
-        stopRefresh();
         HeBean.HeWeather5 weather = rspWeather.HeWeather5.get(0);
         if (weather.status.equals("ok")) {
             HeBean.Now now = weather.now;
@@ -207,7 +244,8 @@ public class WeatherFragment extends BaseFragment implements WeatherContract.Vie
         }
     }
 
-    private void stopRefresh() {
+    @Override
+    public void stopRefresh() {
         if (swipeRefreshLayout.isRefreshing()) {
             swipeRefreshLayout.setRefreshing(false);
         }

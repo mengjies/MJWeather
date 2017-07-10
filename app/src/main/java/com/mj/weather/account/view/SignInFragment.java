@@ -18,7 +18,7 @@ import com.mj.weather.account.activity.LoginActivity;
 import com.mj.weather.account.contract.SignInContract;
 import com.mj.weather.account.model.http.entity.UserBean;
 import com.mj.weather.common.base.BaseFragment;
-import com.mj.weather.common.util.ToastUtils;
+import com.mj.weather.common.common.ToastUtils;
 import com.mj.weather.common.util.TxtCheckout;
 import com.orhanobut.logger.Logger;
 
