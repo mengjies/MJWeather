@@ -5,8 +5,9 @@
     <version value="4" />
 
     <list>
-        <mapping class="com.mj.weather.entity.CityItem" />
-        <mapping class="com.mj.weather.entity.User" />
-        <mapping class="com.mj.weather.entity.JsonCache" />
+        <mapping class="com.mj.weather.weather.model.dp.entity.CityItem" />
+        <mapping class="com.mj.weather.weather.model.dp.entity.User" />
+        <mapping class="com.mj.weather.weather.model.dp.entity.JsonCache" />
+        <mapping class="com.mj.weather.weather.model.dp.entity.WeatherCache" />
     </list>
 </litepal>
