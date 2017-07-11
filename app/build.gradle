@@ -32,25 +32,9 @@ android {
     // 签名配置
     signingConfigs {
         release {
-            try {
-                storeFile file("D:/WorkSpace/Demo/Weather/keystore/Weather.jks")
-                storePassword "weather888"
-                keyAlias "Weather"
-                keyPassword "weather888"
-            } catch (ex) {
-                throw new InvalidUserDataException(ex.toString())
-            }
         }
 
         debug {
-            try {
-                storeFile file("D:/WorkSpace/Demo/Weather/keystore/Weather.jks")
-                storePassword "weather888"
-                keyAlias "Weather"
-                keyPassword "weather888"
-            } catch (ex) {
-                throw new InvalidUserDataException(ex.toString())
-            }
         }
     }
 

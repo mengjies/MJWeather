@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 
 /**
  * Created by MengJie on 2017/1/20.
+ *
+ * BaseFragment
  */
 
 public class BaseFragment extends Fragment {

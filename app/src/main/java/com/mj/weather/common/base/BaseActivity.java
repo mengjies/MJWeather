@@ -15,10 +15,8 @@ import com.mj.weather.common.util.SystemBarTintManager;
 
 /**
  * Created by MengJie on 2017/1/11.
- * <p>
- * 实现沉浸式
- * 管理activity
- * 权限回调交给EasyPermission处理
+ *
+ * BaseActivity
  */
 public class BaseActivity extends AppCompatActivity {
     private String TAG = "BaseActivity";

@@ -5,10 +5,12 @@ import android.content.pm.PackageManager;
 import android.util.Log;
 
 import com.github.moduth.blockcanary.BlockCanaryContext;
-import com.mj.weather.SampleApplicationLike;
+import com.mj.weather.WeatherApplicationLike;
 
 /**
  * Created by MengJie on 2017/6/29.
+ *
+ * 用于BlockCanary
  */
 
 public class AppContext extends BlockCanaryContext {
@@ -18,8 +20,8 @@ public class AppContext extends BlockCanaryContext {
     public String provideQualifier() {
         String qualifier = "";
         try {
-            PackageInfo info = SampleApplicationLike.getContext().getPackageManager()
-                    .getPackageInfo(SampleApplicationLike.getContext().getPackageName(), 0);
+            PackageInfo info = WeatherApplicationLike.getContext().getPackageManager()
+                    .getPackageInfo(WeatherApplicationLike.getContext().getPackageName(), 0);
             qualifier += info.versionCode + "_" + info.versionName + "_YYB";
         } catch (PackageManager.NameNotFoundException e) {
             Log.e(TAG, "provideQualifier exception", e);

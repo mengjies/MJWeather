@@ -37,7 +37,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".SampleApplication"
+        android:name=".WeatherApplication"
         tools:replace="android:allowBackup"
         android:allowBackup="false"
         android:icon="@mipmap/ic_weather"
@@ -49,7 +49,7 @@
             android:value="tSmtSg613s11j0Z9SO9nzvSgCPwmgBrQ" />
 
         <activity
-            android:name=".account.activity.SplashActivity"
+            android:name=".weather.activity.SplashActivity"
             android:theme="@style/AppThemes">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -58,14 +58,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".account.activity.MainActivity"
+            android:name=".weather.activity.MainActivity"
             android:launchMode="singleTask" />
-        <activity android:name=".account.activity.CityListActivity" />
-        <activity android:name=".account.activity.LoginActivity" />
-        <activity android:name=".account.activity.SignInActivity" />
+        <activity android:name=".weather.activity.CityListActivity" />
+        <activity android:name=".weather.activity.LoginActivity" />
+        <activity android:name=".weather.activity.SignInActivity" />
 
         <!--receiver-->
-        <receiver android:name="com.mj.weather.account.receiver.AlarmReceiver" />
+        <receiver android:name="com.mj.weather.common.receiver.AlarmReceiver" />
 
         <!--百度地图-->
         <service
